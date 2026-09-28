@@ -1,0 +1,284 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\sekne\\Desktop\\React Native\\OnlineCasino React Native Expo ASP.NET Core 10 API EntityFrameworkCore\\OnlineCasino\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{B9A774AA-F644-42CB-B877-93AF63B62ADB}|OnlineCasino\\OnlineCasino.csproj|c:\\users\\sekne\\desktop\\react native\\onlinecasino react native expo asp.net core 10 api entityframeworkcore\\onlinecasino\\onlinecasino\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B9A774AA-F644-42CB-B877-93AF63B62ADB}|OnlineCasino\\OnlineCasino.csproj|solutionrelative:onlinecasino\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B9A774AA-F644-42CB-B877-93AF63B62ADB}|OnlineCasino\\OnlineCasino.csproj|c:\\users\\sekne\\desktop\\react native\\onlinecasino react native expo asp.net core 10 api entityframeworkcore\\onlinecasino\\onlinecasino\\persistence\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B9A774AA-F644-42CB-B877-93AF63B62ADB}|OnlineCasino\\OnlineCasino.csproj|solutionrelative:onlinecasino\\persistence\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B9A774AA-F644-42CB-B877-93AF63B62ADB}|OnlineCasino\\OnlineCasino.csproj|c:\\users\\sekne\\desktop\\react native\\onlinecasino react native expo asp.net core 10 api entityframeworkcore\\onlinecasino\\onlinecasino\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{B9A774AA-F644-42CB-B877-93AF63B62ADB}|OnlineCasino\\OnlineCasino.csproj|solutionrelative:onlinecasino\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B9A774AA-F644-42CB-B877-93AF63B62ADB}|OnlineCasino\\OnlineCasino.csproj|c:\\users\\sekne\\desktop\\react native\\onlinecasino react native expo asp.net core 10 api entityframeworkcore\\onlinecasino\\onlinecasino\\appsettings.development.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{B9A774AA-F644-42CB-B877-93AF63B62ADB}|OnlineCasino\\OnlineCasino.csproj|solutionrelative:onlinecasino\\appsettings.development.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B9A774AA-F644-42CB-B877-93AF63B62ADB}|OnlineCasino\\OnlineCasino.csproj|c:\\users\\sekne\\desktop\\react native\\onlinecasino react native expo asp.net core 10 api entityframeworkcore\\onlinecasino\\onlinecasino\\docker-compose.yml||{06C066C6-04A2-4E5D-8202-439FD4234EF1}",
+      "RelativeMoniker": "D:0:0:{B9A774AA-F644-42CB-B877-93AF63B62ADB}|OnlineCasino\\OnlineCasino.csproj|solutionrelative:onlinecasino\\docker-compose.yml||{06C066C6-04A2-4E5D-8202-439FD4234EF1}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B9A774AA-F644-42CB-B877-93AF63B62ADB}|OnlineCasino\\OnlineCasino.csproj|c:\\users\\sekne\\desktop\\react native\\onlinecasino react native expo asp.net core 10 api entityframeworkcore\\onlinecasino\\onlinecasino\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{B9A774AA-F644-42CB-B877-93AF63B62ADB}|OnlineCasino\\OnlineCasino.csproj|solutionrelative:onlinecasino\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B9A774AA-F644-42CB-B877-93AF63B62ADB}|OnlineCasino\\OnlineCasino.csproj|c:\\users\\sekne\\desktop\\react native\\onlinecasino react native expo asp.net core 10 api entityframeworkcore\\onlinecasino\\onlinecasino\\dockerfile||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{B9A774AA-F644-42CB-B877-93AF63B62ADB}|OnlineCasino\\OnlineCasino.csproj|solutionrelative:onlinecasino\\dockerfile||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\sekne\\Desktop\\React Native\\OnlineCasino React Native Expo ASP.NET Core 10 API EntityFrameworkCore\\OnlineCasino\\OnlineCasino\\Migrations\\20260928112704_initialendpoints.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:OnlineCasino\\Migrations\\20260928112704_initialendpoints.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B9A774AA-F644-42CB-B877-93AF63B62ADB}|OnlineCasino\\OnlineCasino.csproj|c:\\users\\sekne\\desktop\\react native\\onlinecasino react native expo asp.net core 10 api entityframeworkcore\\onlinecasino\\onlinecasino\\onlinecasino.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{B9A774AA-F644-42CB-B877-93AF63B62ADB}|OnlineCasino\\OnlineCasino.csproj|solutionrelative:onlinecasino\\onlinecasino.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B9A774AA-F644-42CB-B877-93AF63B62ADB}|OnlineCasino\\OnlineCasino.csproj|c:\\users\\sekne\\desktop\\react native\\onlinecasino react native expo asp.net core 10 api entityframeworkcore\\onlinecasino\\onlinecasino\\services\\blackjackservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B9A774AA-F644-42CB-B877-93AF63B62ADB}|OnlineCasino\\OnlineCasino.csproj|solutionrelative:onlinecasino\\services\\blackjackservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B9A774AA-F644-42CB-B877-93AF63B62ADB}|OnlineCasino\\OnlineCasino.csproj|c:\\users\\sekne\\desktop\\react native\\onlinecasino react native expo asp.net core 10 api entityframeworkcore\\onlinecasino\\onlinecasino\\entities\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B9A774AA-F644-42CB-B877-93AF63B62ADB}|OnlineCasino\\OnlineCasino.csproj|solutionrelative:onlinecasino\\entities\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B9A774AA-F644-42CB-B877-93AF63B62ADB}|OnlineCasino\\OnlineCasino.csproj|c:\\users\\sekne\\desktop\\react native\\onlinecasino react native expo asp.net core 10 api entityframeworkcore\\onlinecasino\\onlinecasino\\controllers\\baseapicontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B9A774AA-F644-42CB-B877-93AF63B62ADB}|OnlineCasino\\OnlineCasino.csproj|solutionrelative:onlinecasino\\controllers\\baseapicontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B9A774AA-F644-42CB-B877-93AF63B62ADB}|OnlineCasino\\OnlineCasino.csproj|c:\\users\\sekne\\desktop\\react native\\onlinecasino react native expo asp.net core 10 api entityframeworkcore\\onlinecasino\\onlinecasino\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B9A774AA-F644-42CB-B877-93AF63B62ADB}|OnlineCasino\\OnlineCasino.csproj|solutionrelative:onlinecasino\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B9A774AA-F644-42CB-B877-93AF63B62ADB}|OnlineCasino\\OnlineCasino.csproj|c:\\users\\sekne\\desktop\\react native\\onlinecasino react native expo asp.net core 10 api entityframeworkcore\\onlinecasino\\onlinecasino\\entities\\blackjacksession.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B9A774AA-F644-42CB-B877-93AF63B62ADB}|OnlineCasino\\OnlineCasino.csproj|solutionrelative:onlinecasino\\entities\\blackjacksession.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B9A774AA-F644-42CB-B877-93AF63B62ADB}|OnlineCasino\\OnlineCasino.csproj|c:\\users\\sekne\\desktop\\react native\\onlinecasino react native expo asp.net core 10 api entityframeworkcore\\onlinecasino\\onlinecasino\\persistence\\seed\\dbseeder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B9A774AA-F644-42CB-B877-93AF63B62ADB}|OnlineCasino\\OnlineCasino.csproj|solutionrelative:onlinecasino\\persistence\\seed\\dbseeder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 7,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "AppDbContext.cs",
+              "DocumentMoniker": "C:\\Users\\sekne\\Desktop\\React Native\\OnlineCasino React Native Expo ASP.NET Core 10 API EntityFrameworkCore\\OnlineCasino\\OnlineCasino\\Persistence\\AppDbContext.cs",
+              "RelativeDocumentMoniker": "OnlineCasino\\Persistence\\AppDbContext.cs",
+              "ToolTip": "C:\\Users\\sekne\\Desktop\\React Native\\OnlineCasino React Native Expo ASP.NET Core 10 API EntityFrameworkCore\\OnlineCasino\\OnlineCasino\\Persistence\\AppDbContext.cs",
+              "RelativeToolTip": "OnlineCasino\\Persistence\\AppDbContext.cs",
+              "ViewState": "AgIAADUAAAAAAAAAAAAAADsAAABXAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-28T11:13:25.046Z",
+              "IsPinned": true,
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "docker-compose.yml",
+              "DocumentMoniker": "C:\\Users\\sekne\\Desktop\\React Native\\OnlineCasino React Native Expo ASP.NET Core 10 API EntityFrameworkCore\\OnlineCasino\\OnlineCasino\\docker-compose.yml",
+              "RelativeDocumentMoniker": "OnlineCasino\\docker-compose.yml",
+              "ToolTip": "C:\\Users\\sekne\\Desktop\\React Native\\OnlineCasino React Native Expo ASP.NET Core 10 API EntityFrameworkCore\\OnlineCasino\\OnlineCasino\\docker-compose.yml",
+              "RelativeToolTip": "OnlineCasino\\docker-compose.yml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003775|",
+              "WhenOpened": "2026-09-28T11:31:37.987Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Dockerfile",
+              "DocumentMoniker": "C:\\Users\\sekne\\Desktop\\React Native\\OnlineCasino React Native Expo ASP.NET Core 10 API EntityFrameworkCore\\OnlineCasino\\OnlineCasino\\Dockerfile",
+              "RelativeDocumentMoniker": "OnlineCasino\\Dockerfile",
+              "ToolTip": "C:\\Users\\sekne\\Desktop\\React Native\\OnlineCasino React Native Expo ASP.NET Core 10 API EntityFrameworkCore\\OnlineCasino\\OnlineCasino\\Dockerfile",
+              "RelativeToolTip": "OnlineCasino\\Dockerfile",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABcAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2026-09-28T11:31:30.53Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "launchSettings.json",
+              "DocumentMoniker": "C:\\Users\\sekne\\Desktop\\React Native\\OnlineCasino React Native Expo ASP.NET Core 10 API EntityFrameworkCore\\OnlineCasino\\OnlineCasino\\Properties\\launchSettings.json",
+              "RelativeDocumentMoniker": "OnlineCasino\\Properties\\launchSettings.json",
+              "ToolTip": "C:\\Users\\sekne\\Desktop\\React Native\\OnlineCasino React Native Expo ASP.NET Core 10 API EntityFrameworkCore\\OnlineCasino\\OnlineCasino\\Properties\\launchSettings.json",
+              "RelativeToolTip": "OnlineCasino\\Properties\\launchSettings.json",
+              "ViewState": "AgIAACcAAAAAAAAAAAAowDAAAAAiAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-09-28T11:28:55.612Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "appsettings.Development.json",
+              "DocumentMoniker": "C:\\Users\\sekne\\Desktop\\React Native\\OnlineCasino React Native Expo ASP.NET Core 10 API EntityFrameworkCore\\OnlineCasino\\OnlineCasino\\appsettings.Development.json",
+              "RelativeDocumentMoniker": "OnlineCasino\\appsettings.Development.json",
+              "ToolTip": "C:\\Users\\sekne\\Desktop\\React Native\\OnlineCasino React Native Expo ASP.NET Core 10 API EntityFrameworkCore\\OnlineCasino\\OnlineCasino\\appsettings.Development.json",
+              "RelativeToolTip": "OnlineCasino\\appsettings.Development.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAABFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-09-28T11:28:30.525Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\sekne\\Desktop\\React Native\\OnlineCasino React Native Expo ASP.NET Core 10 API EntityFrameworkCore\\OnlineCasino\\OnlineCasino\\appsettings.json",
+              "RelativeDocumentMoniker": "OnlineCasino\\appsettings.json",
+              "ToolTip": "C:\\Users\\sekne\\Desktop\\React Native\\OnlineCasino React Native Expo ASP.NET Core 10 API EntityFrameworkCore\\OnlineCasino\\OnlineCasino\\appsettings.json",
+              "RelativeToolTip": "OnlineCasino\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAAEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-09-28T11:27:37.844Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "20260928112704_initialendpoints.cs",
+              "DocumentMoniker": "C:\\Users\\sekne\\Desktop\\React Native\\OnlineCasino React Native Expo ASP.NET Core 10 API EntityFrameworkCore\\OnlineCasino\\OnlineCasino\\Migrations\\20260928112704_initialendpoints.cs",
+              "RelativeDocumentMoniker": "OnlineCasino\\Migrations\\20260928112704_initialendpoints.cs",
+              "ToolTip": "C:\\Users\\sekne\\Desktop\\React Native\\OnlineCasino React Native Expo ASP.NET Core 10 API EntityFrameworkCore\\OnlineCasino\\OnlineCasino\\Migrations\\20260928112704_initialendpoints.cs",
+              "RelativeToolTip": "OnlineCasino\\Migrations\\20260928112704_initialendpoints.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAARAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-28T11:27:04.6Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\sekne\\Desktop\\React Native\\OnlineCasino React Native Expo ASP.NET Core 10 API EntityFrameworkCore\\OnlineCasino\\OnlineCasino\\Program.cs",
+              "RelativeDocumentMoniker": "OnlineCasino\\Program.cs",
+              "ToolTip": "C:\\Users\\sekne\\Desktop\\React Native\\OnlineCasino React Native Expo ASP.NET Core 10 API EntityFrameworkCore\\OnlineCasino\\OnlineCasino\\Program.cs",
+              "RelativeToolTip": "OnlineCasino\\Program.cs",
+              "ViewState": "AgIAADgAAAAAAAAAAAAswEAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-28T11:25:29.586Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "OnlineCasino",
+              "DocumentMoniker": "C:\\Users\\sekne\\Desktop\\React Native\\OnlineCasino React Native Expo ASP.NET Core 10 API EntityFrameworkCore\\OnlineCasino\\OnlineCasino\\OnlineCasino.csproj",
+              "RelativeDocumentMoniker": "OnlineCasino\\OnlineCasino.csproj",
+              "ToolTip": "C:\\Users\\sekne\\Desktop\\React Native\\OnlineCasino React Native Expo ASP.NET Core 10 API EntityFrameworkCore\\OnlineCasino\\OnlineCasino\\OnlineCasino.csproj",
+              "RelativeToolTip": "OnlineCasino\\OnlineCasino.csproj",
+              "ViewState": "AgIAAAwAAAAAAAAAAAAAACIAAAA+AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2026-09-28T11:23:05.655Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "User.cs",
+              "DocumentMoniker": "C:\\Users\\sekne\\Desktop\\React Native\\OnlineCasino React Native Expo ASP.NET Core 10 API EntityFrameworkCore\\OnlineCasino\\OnlineCasino\\Entities\\User.cs",
+              "RelativeDocumentMoniker": "OnlineCasino\\Entities\\User.cs",
+              "ToolTip": "C:\\Users\\sekne\\Desktop\\React Native\\OnlineCasino React Native Expo ASP.NET Core 10 API EntityFrameworkCore\\OnlineCasino\\OnlineCasino\\Entities\\User.cs",
+              "RelativeToolTip": "OnlineCasino\\Entities\\User.cs",
+              "ViewState": "AgIAAAIAAAAAAAAAAAAxwBAAAAAVAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-28T11:20:22.326Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "BaseApiController.cs",
+              "DocumentMoniker": "C:\\Users\\sekne\\Desktop\\React Native\\OnlineCasino React Native Expo ASP.NET Core 10 API EntityFrameworkCore\\OnlineCasino\\OnlineCasino\\Controllers\\BaseApiController.cs",
+              "RelativeDocumentMoniker": "OnlineCasino\\Controllers\\BaseApiController.cs",
+              "ToolTip": "C:\\Users\\sekne\\Desktop\\React Native\\OnlineCasino React Native Expo ASP.NET Core 10 API EntityFrameworkCore\\OnlineCasino\\OnlineCasino\\Controllers\\BaseApiController.cs",
+              "RelativeToolTip": "OnlineCasino\\Controllers\\BaseApiController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-28T11:20:14.99Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "AuthController.cs",
+              "DocumentMoniker": "C:\\Users\\sekne\\Desktop\\React Native\\OnlineCasino React Native Expo ASP.NET Core 10 API EntityFrameworkCore\\OnlineCasino\\OnlineCasino\\Controllers\\AuthController.cs",
+              "RelativeDocumentMoniker": "OnlineCasino\\Controllers\\AuthController.cs",
+              "ToolTip": "C:\\Users\\sekne\\Desktop\\React Native\\OnlineCasino React Native Expo ASP.NET Core 10 API EntityFrameworkCore\\OnlineCasino\\OnlineCasino\\Controllers\\AuthController.cs",
+              "RelativeToolTip": "OnlineCasino\\Controllers\\AuthController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-28T11:20:13.883Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "BlackjackSession.cs",
+              "DocumentMoniker": "C:\\Users\\sekne\\Desktop\\React Native\\OnlineCasino React Native Expo ASP.NET Core 10 API EntityFrameworkCore\\OnlineCasino\\OnlineCasino\\Entities\\BlackjackSession.cs",
+              "RelativeDocumentMoniker": "OnlineCasino\\Entities\\BlackjackSession.cs",
+              "ToolTip": "C:\\Users\\sekne\\Desktop\\React Native\\OnlineCasino React Native Expo ASP.NET Core 10 API EntityFrameworkCore\\OnlineCasino\\OnlineCasino\\Entities\\BlackjackSession.cs",
+              "RelativeToolTip": "OnlineCasino\\Entities\\BlackjackSession.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAXAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-28T11:15:23.339Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "BlackjackService.cs",
+              "DocumentMoniker": "C:\\Users\\sekne\\Desktop\\React Native\\OnlineCasino React Native Expo ASP.NET Core 10 API EntityFrameworkCore\\OnlineCasino\\OnlineCasino\\Services\\BlackjackService.cs",
+              "RelativeDocumentMoniker": "OnlineCasino\\Services\\BlackjackService.cs",
+              "ToolTip": "C:\\Users\\sekne\\Desktop\\React Native\\OnlineCasino React Native Expo ASP.NET Core 10 API EntityFrameworkCore\\OnlineCasino\\OnlineCasino\\Services\\BlackjackService.cs",
+              "RelativeToolTip": "OnlineCasino\\Services\\BlackjackService.cs",
+              "ViewState": "AgIAAHoAAAAAAAAAAADwv4UAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-28T11:14:37.606Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "DbSeeder.cs",
+              "DocumentMoniker": "C:\\Users\\sekne\\Desktop\\React Native\\OnlineCasino React Native Expo ASP.NET Core 10 API EntityFrameworkCore\\OnlineCasino\\OnlineCasino\\Persistence\\Seed\\DbSeeder.cs",
+              "RelativeDocumentMoniker": "OnlineCasino\\Persistence\\Seed\\DbSeeder.cs",
+              "ToolTip": "C:\\Users\\sekne\\Desktop\\React Native\\OnlineCasino React Native Expo ASP.NET Core 10 API EntityFrameworkCore\\OnlineCasino\\OnlineCasino\\Persistence\\Seed\\DbSeeder.cs",
+              "RelativeToolTip": "OnlineCasino\\Persistence\\Seed\\DbSeeder.cs",
+              "ViewState": "AgIAAEoAAAAAAAAAAAAAAAUAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-28T11:14:22.534Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:5:0:{fabf9319-47eb-497e-b8f6-d9f73fba5f55}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

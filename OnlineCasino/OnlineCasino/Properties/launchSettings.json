@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json.schemastore.org/launchsettings.json",
+  "profiles": {
+    "OnlineCasino.Api": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": false,
+      "launchUrl": "swagger",
+      "applicationUrl": "https://localhost:5001;http://localhost:5000",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ConnectionStrings__Default": "Data Source=./data/casino.db",
+        "Jwt__Key": "super-secret-key-for-demo-min-32-chars!!",
+        "Jwt__Issuer": "online-casino",
+        "Jwt__Audience": "online-casino-app",
+        "Jwt__ExpireMinutes": "1440"
+      }
+    },
+
+    "OnlineCasino.Api (HTTP only)": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": false,
+      "applicationUrl": "http://localhost:5000",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ConnectionStrings__Default": "Data Source=./data/casino.db",
+        "Jwt__Key": "super-secret-key-for-demo-min-32-chars!!",
+        "Jwt__Issuer": "online-casino",
+        "Jwt__Audience": "online-casino-app"
+      }
+    },
+
+    "OnlineCasino.Api (LAN за React Native)": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": false,
+      "applicationUrl": "http://0.0.0.0:5000",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ConnectionStrings__Default": "Data Source=./data/casino.db",
+        "Jwt__Key": "super-secret-key-for-demo-min-32-chars!!",
+        "Jwt__Issuer": "online-casino",
+        "Jwt__Audience": "online-casino-app"
+      }
+    },
+
+    "IIS Express": {
+      "commandName": "IISExpress",
+      "launchBrowser": false,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    },
+
+    "Docker": {
+      "commandName": "Docker",
+      "launchBrowser": false,
+      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Production",
+        "ConnectionStrings__Default": "Data Source=/app/data/casino.db",
+        "Jwt__Key": "super-secret-key-for-demo-min-32-chars!!"
+      },
+      "publishAllPorts": false,
+      "useSSL": false
+    }
+  }
+}

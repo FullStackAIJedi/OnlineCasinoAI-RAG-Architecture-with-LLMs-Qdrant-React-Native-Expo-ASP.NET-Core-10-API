@@ -1,0 +1,22 @@
+﻿services:
+  casino:
+    build: .
+    image: onlinecasino:latest
+    container_name: onlinecasino
+    
+    ports:
+      - "8080:8080"
+    
+    volumes:
+      - ./data:/app/data
+    
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_URLS: http://+:8080
+      ConnectionStrings__Default: "Data Source=/app/data/casino.db"
+      Jwt__Key: "super-secret-key-for-demo-min-32-chars!!"
+      Jwt__Issuer: "online-casino"
+      Jwt__Audience: "online-casino-app"
+      Jwt__ExpireMinutes: "1440"
+    
+    restart: unless-stopped
