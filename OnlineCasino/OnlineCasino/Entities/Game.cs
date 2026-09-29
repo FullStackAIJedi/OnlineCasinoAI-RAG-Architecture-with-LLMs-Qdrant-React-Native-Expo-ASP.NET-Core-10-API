@@ -11,6 +11,7 @@
         public bool Enabled { get; set; } = true;
         public decimal MinBet { get; set; }
         public decimal MaxBet { get; set; }
+        public int ReelsCount { get; set; }
 
         public ICollection<GameRound> Rounds { get; set; } = new List<GameRound>();
     }

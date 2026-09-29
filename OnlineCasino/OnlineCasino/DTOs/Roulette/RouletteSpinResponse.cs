@@ -3,7 +3,7 @@
     public class RouletteSpinResponse
     {
         public string RoundId { get; set; } = null!;
-        public int WinningNumber { get; set; }
+        public int WinningNumber { get; set; } // 0-37 (37 = 00)
         public string WinningColor { get; set; } = null!;
         public decimal TotalBet { get; set; }
         public decimal TotalWin { get; set; }

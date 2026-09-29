@@ -8,5 +8,6 @@
         public decimal WinAmount { get; set; }
         public decimal Balance { get; set; }
         public string Result { get; set; } = null!;
+        public int MatchCount { get; set; }
     }
 }

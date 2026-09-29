@@ -117,6 +117,9 @@ namespace OnlineCasino.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("ReelsCount")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
 
                     b.HasIndex("GameTypeId");
@@ -280,6 +283,12 @@ namespace OnlineCasino.Migrations
 
                     b.Property<decimal>("Payout3")
                         .HasPrecision(18, 2)
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("Payout4")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("Payout5")
                         .HasColumnType("TEXT");
 
                     b.Property<decimal>("Weight")

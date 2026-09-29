@@ -25,15 +25,15 @@
         public GameHistoryController(IGameHistoryService history) => _history = history;
 
         /// <summary>
-        /// Връща пагинирана история на всички рундове на текущия потребител.
-        /// Може да се филтрира по код на игра чрез <paramref name="game"/>.
+        /// Returns a paginated history of all rounds for the current user.
+        /// Can be filtered by game code using <paramref name="game"/>.
         /// </summary>
         /// <param name="game">
-        /// Опционален филтър по код на игра: <c>"slots"</c>, <c>"roulette"</c>, <c>"blackjack"</c>.
-        /// Ако е <c>null</c> или празен – връща всички игри.
+        /// Optional filter by game code: <c>"slots"</c>, <c>"roulette"</c>, <c>"blackjack"</c>.
+        /// If <c>null</c> or empty, returns all games.
         /// </param>
-        /// <param name="page">Номер на страница (започва от 1). Default: 1.</param>
-        /// <param name="pageSize">Брой записи на страница (1–100). Default: 20.</param>
+        /// <param name="page">Page number (starts from 1). Default: 1.</param>
+        /// <param name="pageSize">Number of records per page (1–100). Default: 20.</param>
         [HttpGet]
         public async Task<IActionResult> Get(
             [FromQuery] string? game = null,
