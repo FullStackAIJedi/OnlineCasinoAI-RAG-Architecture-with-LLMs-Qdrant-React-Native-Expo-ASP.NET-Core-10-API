@@ -51,7 +51,7 @@
         /// <summary>
         /// Изтрива (hard delete) акаунта на потребителя.
         /// <para>
-        /// ⚠️ Демо решение – cascade-ва всички свързани записи (wallet, transactions, rounds, sessions).
+        /// Демо решение – cascade-ва всички свързани записи (wallet, transactions, rounds, sessions).
         /// В production трябва да е soft delete + GDPR анонимизация, за да се запази
         /// историята на транзакциите за одит.
         /// </para>
@@ -108,6 +108,7 @@
                     Id = u.Id,
                     Email = u.Email,
                     NickName = u.NickName,
+                    PofileImage = u.PofileImage,
                     FirstName = u.FirstName,
                     LastName = u.LastName,
                     Role = u.Role.Name,
@@ -131,6 +132,7 @@
             // Partial update – null полета не променят текущата стойност
             user.FirstName = req.FirstName ?? user.FirstName;
             user.LastName = req.LastName ?? user.LastName;
+            user.PofileImage = req.PofileImage ?? user.PofileImage;
             await _db.SaveChangesAsync();
 
             return await GetProfileAsync(userId);
@@ -158,6 +160,7 @@
                     Id = u.Id,
                     Email = u.Email,
                     NickName = u.NickName,
+                    PofileImage = u.PofileImage,
                     Role = u.Role.Name,
                     IsBlocked = u.IsBlocked,
                     Balance = u.Wallet.Balance
