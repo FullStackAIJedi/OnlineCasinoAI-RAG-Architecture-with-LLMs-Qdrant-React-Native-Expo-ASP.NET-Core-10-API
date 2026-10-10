@@ -7,14 +7,14 @@
     using OnlineCasino.Services;
 
     /// <summary>
-    /// Blackjack endpoints – стартиране на игра, hit, stand, double и проверка на състояние.
+    /// Blackjack endpoints – starting a game, hit, stand, double, and state retrieval.
     /// <para>
-    /// Играта е stateful – сървърът пази ръцете на играча и дилъра в <c>BlackjackSessions</c>.
-    /// Клиентът <b>никога</b> не изпраща карти – само действия (hit / stand / double).
-    /// Сървърът генерира картите, изчислява резултата и сетълва залога.
+    /// The game is stateful – the server keeps the player's and dealer's hands in <c>BlackjackSessions</c>.
+    /// The client <b>never</b> sends cards – only actions (hit / stand / double).
+    /// The server generates the cards, calculates the result, and settles the bet.
     /// </para>
     /// <para>
-    /// Всички endpoints изискват валиден JWT токен (cookie <c>access_token</c>).
+    /// All endpoints require a valid JWT token (cookie <c>access_token</c>).
     /// </para>
     /// </summary>
     [Authorize]
@@ -23,25 +23,19 @@
     {
         private readonly IBlackjackService _bj;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BlackjackController"/> class.
+        /// </summary>
+        /// <param name="bj">The blackjack service used to run game sessions.</param>
         public BlackjackController(IBlackjackService bj) => _bj = bj;
 
         /// <summary>
-        /// Стартира нова Blackjack сесия – тегли по 2 карти на играча и дилъра,
-        /// удържа залога от wallet-а и връща началното състояние.
+        /// Starts a new Blackjack session – draws 2 cards each for the player and the dealer,
+        /// deducts the bet from the wallet, and returns the initial state.
         /// </summary>
-        /// <param name="gameCode">Код на играта (напр. <c>"blackjack"</c>).</param>
-        /// <param name="req">Заявка съдържаща <c>BetAmount</c>.</param>
-        /// <response code="200">Сесията е стартирана успешно. Връща <c>BlackjackStateDto</c>.</response>
-        /// <response code="400">Невалиден залог (извън min/max) или неположителна сума.</response>
-        /// <response code="401">Липсва валиден JWT токен.</response>
-        /// <response code="404">Играта не е намерена или е изключена.</response>
-        /// <response code="500">Неочаквана грешка.</response>
-        [HttpPost("{gameCode}/start")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        /// <param name="gameCode">Game code (e.g. <c>"blackjack"</c>).</param>
+        /// <param name="req">Request containing <c>BetAmount</c>.</param>
+        [HttpPost("{gameCode}/start")] 
         public async Task<IActionResult> Start([FromRoute] string gameCode, [FromBody] StartBlackjackRequest req)
         {
             var userId = GetUserId();
@@ -50,28 +44,18 @@
         }
 
         /// <summary>
-        /// Играчът тегли още една карта.
+        /// The player draws another card.
         /// <para>
-        /// Ако резултатът надхвърли 21 → сесията приключва с <c>Bust</c> (загуба).
-        /// Ако стане точно 21 → дилърът играе и сесията приключва.
-        /// Иначе играта продължава с <c>PlayerTurn</c>.
+        /// If the total exceeds 21 → the session ends with <c>Bust</c> (loss).
+        /// If it becomes exactly 21 → the dealer plays and the session ends.
+        /// Otherwise, the game continues with <c>PlayerTurn</c>.
         /// </para>
         /// <para>
-        /// Не изисква body – сървърът сам решава коя карта да изтегли.
+        /// Does not require a body – the server decides which card to draw.
         /// </para>
         /// </summary>
-        /// <param name="sessionId">Публичният идентификатор на сесията (<c>PublicId</c>).</param>
-        /// <response code="200">Картата е изтеглена, връща обновено <c>BlackjackStateDto</c>.</response>
-        /// <response code="400">Сесията не е в <c>PlayerTurn</c> (вече е приключила).</response>
-        /// <response code="401">Липсва валиден JWT токен.</response>
-        /// <response code="404">Сесията не е намерена или не принадлежи на текущия потребител.</response>
-        /// <response code="500">Неочаквана грешка.</response>
-        [HttpPost("sessions/{sessionId}/hit")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        /// <param name="sessionId">The public identifier of the session (<c>PublicId</c>).</param>
+        [HttpPost("sessions/{sessionId}/hit")] 
         public async Task<IActionResult> Hit([FromRoute] string sessionId)
         {
             var userId = GetUserId();
@@ -80,21 +64,11 @@
         }
 
         /// <summary>
-        /// Играчът спира да тегли. Дилърът тегли карти, докато достигне поне 17,
-        /// след което се определя победителят и се сетълва залога.
+        /// The player stops drawing. The dealer draws cards until reaching at least 17,
+        /// after which the winner is determined and the bet is settled.
         /// </summary>
-        /// <param name="sessionId">Публичният идентификатор на сесията.</param>
-        /// <response code="200">Рундът е приключил. Връща финалното <c>BlackjackStateDto</c> с <c>Result</c> и <c>WinAmount</c>.</response>
-        /// <response code="400">Сесията не е в <c>PlayerTurn</c>.</response>
-        /// <response code="401">Липсва валиден JWT токен.</response>
-        /// <response code="404">Сесията не е намерена или не принадлежи на текущия потребител.</response>
-        /// <response code="500">Неочаквана грешка.</response>
-        [HttpPost("sessions/{sessionId}/stand")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        /// <param name="sessionId">The public identifier of the session.</param>
+        [HttpPost("sessions/{sessionId}/stand")] 
         public async Task<IActionResult> Stand([FromRoute] string sessionId)
         {
             var userId = GetUserId();
@@ -102,25 +76,15 @@
             return AsActionResult(await _bj.StandAsync(userId.Value, sessionId));
         }
 
-        /// <summary>
-        /// Удвоява залога, тегли точно една карта и автоматично приключва рунда (stand).
+        ////// <summary>
+        /// Doubles the bet, draws exactly one card, and automatically ends the round (stand).
         /// <para>
-        /// Позволено само на първите две карти на играча.
-        /// Удвоената сума се удържа допълнително от wallet-а.
+        /// Only allowed on the player's first two cards.
+        /// The doubled amount is deducted additionally from the wallet.
         /// </para>
         /// </summary>
-        /// <param name="sessionId">Публичният идентификатор на сесията.</param>
-        /// <response code="200">Рундът е приключил с удвоен залог.</response>
-        /// <response code="400">Сесията не е в <c>PlayerTurn</c> или играчът вече е теглил карта.</response>
-        /// <response code="401">Липсва валиден JWT токен.</response>
-        /// <response code="404">Сесията не е намерена или не принадлежи на текущия потребител.</response>
-        /// <response code="500">Неочаквана грешка.</response>
-        [HttpPost("sessions/{sessionId}/double")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        /// <param name="sessionId">The public identifier of the session.</param>
+        [HttpPost("sessions/{sessionId}/double")] 
         public async Task<IActionResult> Double([FromRoute] string sessionId)
         {
             var userId = GetUserId();
@@ -129,22 +93,14 @@
         }
 
         /// <summary>
-        /// Връща текущото състояние на сесията без да променя нищо.
+        /// Returns the current session state without changing anything.
         /// <para>
-        /// Полезно при reconnect от React Native (напр. след app background / foreground).
-        /// Втората карта на дилъра се показва като <c>"?"</c>, докато сесията не приключи.
+        /// Useful for reconnect from React Native (e.g. after app background / foreground).
+        /// The dealer's second card is shown as <c>"?"</c> until the session is finished.
         /// </para>
         /// </summary>
-        /// <param name="sessionId">Публичният идентификатор на сесията.</param>
-        /// <response code="200">Връща текущото <c>BlackjackStateDto</c>.</response>
-        /// <response code="401">Липсва валиден JWT токен.</response>
-        /// <response code="404">Сесията не е намерена или не принадлежи на текущия потребител.</response>
-        /// <response code="500">Неочаквана грешка.</response>
-        [HttpGet("sessions/{sessionId}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        /// <param name="sessionId">The public identifier of the session.</param>
+        [HttpGet("sessions/{sessionId}")] 
         public async Task<IActionResult> GetState([FromRoute] string sessionId)
         {
             var userId = GetUserId();

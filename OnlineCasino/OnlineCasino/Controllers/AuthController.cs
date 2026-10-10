@@ -7,8 +7,8 @@
     using OnlineCasino.Services;
 
     /// <summary>
-    /// Authentication endpoints – регистрация, логин, логаут, смяна на парола.
-    /// Използва HttpOnly cookie ("access_token") за JWT токена.
+    /// Authentication endpoints – registration, login, logout, password change.
+    /// Uses an HttpOnly cookie ("access_token") for the JWT token.
     /// </summary>
     public class AuthController : BaseApiController
     {
@@ -17,18 +17,12 @@
         public AuthController(IAuthService auth) => _auth = auth;
 
         /// <summary>
-        /// Регистрира нов потребител.
-        /// При успех записва JWT токен в HttpOnly cookie и връща { message = "OK" }.
+        /// Registers a new user.
+        /// On success, writes the JWT token into an HttpOnly cookie and returns { message = "OK" }.
         /// </summary>
         /// <param name="req">Email, NickName, Password.</param>
-        /// <response code="200">Успешна регистрация, cookie е сет-нат.</response>
-        /// <response code="409">Email или NickName вече е зает.</response>
-        /// <response code="500">Неочаквана грешка.</response>
         [HttpPost("register")]
-        [AllowAnonymous]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status409Conflict)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [AllowAnonymous] 
         public async Task<IActionResult> Register([FromBody] SignUpRequest req)
         {
             var result = await _auth.SignUpAsync(req);
@@ -39,20 +33,12 @@
         }
 
         /// <summary>
-        /// Логва съществуващ потребител.
-        /// При успех записва JWT токен в HttpOnly cookie и връща { message = "OK" }.
+        /// Logs in an existing user.
+        /// On success, writes the JWT token into an HttpOnly cookie and returns { message = "OK" }.
         /// </summary>
-        /// <param name="req">Email и Password.</param>
-        /// <response code="200">Успешен логин, cookie е сет-нат.</response>
-        /// <response code="401">Грешен email или парола.</response>
-        /// <response code="403">Акаунтът е блокиран.</response>
-        /// <response code="500">Неочаквана грешка.</response>
+        /// <param name="req">Email and Password.</param>
         [HttpPost("login")]
-        [AllowAnonymous]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [AllowAnonymous] 
         public async Task<IActionResult> Login([FromBody] SignInRequest req)
         {
             var result = await _auth.SignInAsync(req);
@@ -63,13 +49,11 @@
         }
 
         /// <summary>
-        /// Изчиства auth cookie-то (logout на текущата сесия).
-        /// Не инвалидира JWT-то server-side (демо решение).
+        /// Clears the auth cookie (logout of the current session).
+        /// Does not invalidate the JWT server-side (demo solution).
         /// </summary>
-        /// <response code="200">Винаги успешен.</response>
         [HttpPost("logout")]
-        [Authorize]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [Authorize] 
         public IActionResult Logout()
         {
             ClearAuthCookie();
@@ -77,22 +61,12 @@
         }
 
         /// <summary>
-        /// Сменя паролата на логнатия потребител.
-        /// Изисква текущата парола за потвърждение.
+        /// Changes the password of the logged-in user.
+        /// Requires the current password for confirmation.
         /// </summary>
-        /// <param name="req">CurrentPassword и NewPassword.</param>
-        /// <response code="200">Паролата е сменена успешно.</response>
-        /// <response code="400">Текущата парола е грешна.</response>
-        /// <response code="401">Липсва валиден токен.</response>
-        /// <response code="404">Потребителят не е намерен.</response>
-        /// <response code="500">Неочаквана грешка.</response>
+        /// <param name="req">CurrentPassword and NewPassword.</param>
         [HttpPost("change-password")]
-        [Authorize]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Authorize] 
         public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequest req)
         {
             var userId = GetUserId();
@@ -103,15 +77,11 @@
         }
 
         /// <summary>
-        /// Връща информация за текущо логнатия потребител от JWT claims.
-        /// Полезно за React Native при app start (за да възстановиш session state).
+        /// Returns information about the currently logged-in user from JWT claims.
+        /// Useful for React Native on app start (to restore session state).
         /// </summary>
-        /// <response code="200">Връща id, email, nickname, role.</response>
-        /// <response code="401">Липсва валиден токен.</response>
         [HttpGet("me")]
-        [Authorize]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [Authorize] 
         public IActionResult Me()
         {
             var userId = GetUserId();

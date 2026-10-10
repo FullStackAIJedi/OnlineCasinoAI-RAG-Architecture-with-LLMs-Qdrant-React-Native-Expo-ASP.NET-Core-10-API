@@ -9,103 +9,105 @@
     using OnlineCasino.Models;
 
     /// <summary>
-    /// Wallet service – баланс, транзакции и атомарни операции по wallet-а.
+    /// Wallet service – balance, transactions, and atomic operations on the wallet.
     /// <para>
-    /// Всички промени по баланса минават през <see cref="ApplyAsync"/>, който:
+    /// All balance changes go through <see cref="ApplyAsync"/>, which:
     /// <list type="bullet">
-    ///   <item>обновява <c>Wallet.Balance</c>,</item>
-    ///   <item>записва ред в <c>Transactions</c> с типа, сумата и баланса след операцията,</item>
-    ///   <item>записва <c>UpdatedAt</c> timestamp.</item>
+    ///   <item>updates <c>Wallet.Balance</c>,</item>
+    ///   <item>records an entry in <c>Transactions</c> with the type, amount, and balance after the operation,</item>
+    ///   <item>records the <c>UpdatedAt</c> timestamp.</item>
     /// </list>
     /// </para>
     /// <para>
-    /// Никога не се променя баланс директно от контролер – винаги през този service.
+    /// The balance must never be modified directly from a controller – always through this service.
     /// </para>
-    /// </summary>
+    /// </summary> 
     public interface IWalletService
     {
         /// <summary>
-        /// Връща текущия баланс и валутата на потребителя.
+        /// Returns the user's current balance and currency.
         /// </summary>
-        /// <param name="userId">Id на потребителя (от JWT).</param>
+        /// <param name="userId">User ID (from JWT).</param>
         Task<Result<WalletDto>> GetWalletAsync(int userId);
 
         /// <summary>
-        /// Връща пагинирана история на транзакциите на потребителя.
+        /// Returns the user's paginated transaction history.
         /// <para>
-        /// Сортирани по <c>CreatedAt</c> descending (най-новите първи).
+        /// Sorted by <c>CreatedAt</c> descending (newest first).
         /// </para>
         /// <para>
-        /// Пагинацията се нормализира: <c>page &lt; 1 → 1</c>, <c>pageSize &lt; 1 или &gt; 100 → 20</c>.
+        /// Pagination is normalized: <c>page &lt; 1 → 1</c>, <c>pageSize &lt; 1 or &gt; 100 → 20</c>.
         /// </para>
         /// </summary>
-        /// <param name="userId">Id на потребителя.</param>
-        /// <param name="page">Номер на страница (започва от 1).</param>
-        /// <param name="pageSize">Брой записи на страница (1–100).</param>
+        /// <param name="userId">User ID.</param>
+        /// <param name="page">Page number (starts at 1).</param>
+        /// <param name="pageSize">Number of records per page (1–100).</param>
         Task<Result<PagedResult<TransactionDto>>> GetTransactionsAsync(int userId, int page, int pageSize);
 
         /// <summary>
-        /// Демо депозит – кредитира сумата веднага.
+        /// Demo deposit – credits the amount immediately.
         /// <para>
-        /// Създава <c>Transaction</c> с тип <c>Deposit</c> и референция <c>null</c>.
+        /// Creates a <c>Transaction</c> with type <c>Deposit</c> and a <c>null</c> reference.
         /// </para>
         /// <para>
-        /// В production трябва да създава pending payment и да чака webhook.
+        /// In production, it should create a pending payment and wait for a webhook.
         /// </para>
         /// </summary>
-        /// <param name="userId">Id на потребителя.</param>
-        /// <param name="amount">Сумата (трябва да е положителна).</param>
+        /// <param name="userId">User ID.</param>
+        /// <param name="amount">The amount (must be positive).</param>
         Task<Result<WalletDto>> DepositAsync(int userId, decimal amount);
 
-        /// <summary>
-        /// Демо withdraw – дебитира сумата веднага, ако има достатъчен баланс.
-        /// <para>
-        /// Създава <c>Transaction</c> с тип <c>Withdraw</c> и отрицателна сума.
-        /// </para>
-        /// <para>
-        /// В production трябва да създава pending withdrawal, който минава
-        /// през Finance approval и payment provider.
-        /// </para>
-        /// </summary>
-        /// <param name="userId">Id на потребителя.</param>
-        /// <param name="amount">Сумата (трябва да е положителна и ≤ баланса).</param>
-        Task<Result<WalletDto>> WithdrawAsync(int userId, decimal amount);
 
         /// <summary>
-        /// Вътрешен метод – дебитира сума от wallet-а с тип <c>Bet</c>.
-        /// <para>Използва се от game services (Slots, Roulette, Blackjack) при залагане.</para>
+        /// Demo withdrawal – debits the amount immediately if there is a sufficient balance.
         /// <para>
-        /// Проверява дали балансът е достатъчен. Връща новия баланс при успех.
+        /// Creates a <c>Transaction</c> with type <c>Withdraw</c> and a negative amount.
+        /// </para>
+        /// <para>
+        /// In production, it should create a pending withdrawal that goes
+        /// through Finance approval and the payment provider.
         /// </para>
         /// </summary>
-        /// <param name="userId">Id на потребителя.</param>
-        /// <param name="amount">Сумата за дебитиране (положителна).</param>
-        /// <param name="referenceId">Референция към рунда (напр. <c>ClientRoundId</c> или <c>PublicId</c>).</param>
-        /// <returns>Новият баланс след дебита.</returns>
+        /// <param name="userId">User ID.</param>
+        /// <param name="amount">The amount (must be positive and ≤ the balance).</param>
+        Task<Result<WalletDto>> WithdrawAsync(int userId, decimal amount);
+ 
+        /// <summary>
+        /// Internal method – debits an amount from the wallet with type <c>Bet</c>.
+        /// <para>Used by game services (Slots, Roulette, Blackjack) when placing a bet.</para>
+        /// <para>
+        /// Checks whether the balance is sufficient. Returns the new balance on success.
+        /// </para>
+        /// </summary>
+        /// <param name="userId">User ID.</param>
+        /// <param name="amount">The amount to debit (positive).</param>
+        /// <param name="referenceId">Reference to the round (e.g. <c>ClientRoundId</c> or <c>PublicId</c>).</param>
+        /// <returns>The new balance after the debit.</returns> 
         Task<Result<decimal>> DebitAsync(int userId, decimal amount, string referenceId);
 
+
         /// <summary>
-        /// Вътрешен метод – кредитира сума към wallet-а с тип <c>Win</c>.
-        /// <para>Използва се от game services при печалба.</para>
+        /// Internal method – credits an amount to the wallet with type <c>Win</c>.
+        /// <para>Used by game services when a win occurs.</para>
         /// <para>
-        /// Ако <paramref name="amount"/> ≤ 0 – не прави нищо и връща текущия баланс
-        /// (за удобство на клиентите, които викат <c>CreditAsync</c> дори при 0 печалба).
+        /// If <paramref name="amount"/> ≤ 0 – does nothing and returns the current balance
+        /// (for the convenience of clients that call <c>CreditAsync</c> even when the win amount is 0).
         /// </para>
         /// </summary>
-        /// <param name="userId">Id на потребителя.</param>
-        /// <param name="amount">Сумата за кредитиране (може да е 0).</param>
-        /// <param name="referenceId">Референция към рунда.</param>
-        /// <returns>Новият баланс след кредита.</returns>
+        /// <param name="userId">User ID.</param>
+        /// <param name="amount">The amount to credit (can be 0).</param>
+        /// <param name="referenceId">Reference to the round.</param>
+        /// <returns>The new balance after the credit.</returns>
         Task<Result<decimal>> CreditAsync(int userId, decimal amount, string referenceId);
     }
-
+     
     /// <summary>
-    /// Имплементация на <see cref="IWalletService"/>.
+    /// Implementation of <see cref="IWalletService"/>.
     /// <para>
-    /// Всяка операция, която променя баланса, минава през <see cref="ApplyAsync"/> –
-    /// единственото място, което пише в <c>Wallets</c> и <c>Transactions</c>.
+    /// Every operation that modifies the balance goes through <see cref="ApplyAsync"/> –
+    /// the only place that writes to <c>Wallets</c> and <c>Transactions</c>.
     /// </para>
-    /// </summary>
+    /// </summary>  
     public class WalletService : IWalletService
     {
         private readonly AppDbContext _db;
@@ -128,8 +130,7 @@
 
         /// <inheritdoc />
         public async Task<Result<PagedResult<TransactionDto>>> GetTransactionsAsync(int userId, int page, int pageSize)
-        {
-            // Нормализация на пагинацията
+        { 
             if (page < 1) page = 1;
             if (pageSize < 1 || pageSize > 100) pageSize = 20;
 
@@ -226,10 +227,10 @@
         }
 
         // --- helpers ---
-
+         
         /// <summary>
-        /// Връща текущия баланс на потребителя (без projection към DTO).
-        /// </summary>
+        /// Returns the user's current balance (without projecting to a DTO).
+        /// </summary> 
         private async Task<decimal> GetBalanceAsync(int userId)
         {
             return await _db.Wallets
@@ -237,10 +238,10 @@
                 .Select(w => w.Balance)
                 .FirstAsync();
         }
-
+         
         /// <summary>
-        /// Връща Id на тип транзакция по име (напр. <c>"Deposit"</c>, <c>"Bet"</c>, <c>"Win"</c>).
-        /// </summary>
+        /// Returns the transaction type ID by name (e.g. <c>"Deposit"</c>, <c>"Bet"</c>, <c>"Win"</c>).
+        /// </summary> 
         private async Task<int> GetTransactionTypeId(string name)
         {
             return await _db.TransactionTypes
@@ -250,20 +251,20 @@
         }
 
         /// <summary>
-        /// Прилага атомарна промяна на баланса:
+        /// Applies an atomic balance change:
         /// <list type="number">
-        ///   <item>Обновява <c>Wallet.Balance</c> и <c>UpdatedAt</c>.</item>
-        ///   <item>Създава <c>Transaction</c> ред с типа, сумата, баланса след операцията и референцията.</item>
-        ///   <item>Записва промените в базата.</item>
+        /// <item>Updates <c>Wallet.Balance</c> and <c>UpdatedAt</c>.</item>
+        /// <item>Creates a <c>Transaction</c> record with the type, amount, balance after the operation, and reference.</item>
+        /// <item>Saves the changes to the database.</item>
         /// </list>
         /// <para>
-        /// Това е единственото място в service-а, което пише в <c>Wallets</c> и <c>Transactions</c>.
+        /// This is the only place in the service that writes to <c>Wallets</c> and <c>Transactions</c>.
         /// </para>
         /// </summary>
-        /// <param name="userId">Id на потребителя.</param>
-        /// <param name="delta">Промяна на баланса (положителна за кредит, отрицателна за дебит).</param>
-        /// <param name="typeId">Id на типа транзакция (от <c>TransactionTypes</c>).</param>
-        /// <param name="referenceId">Референция към рунда или <c>null</c> за deposit/withdraw.</param>
+        /// <param name="userId">User ID.</param>
+        /// <param name="delta">Balance change (positive for credit, negative for debit).</param>
+        /// <param name="typeId">Transaction type ID (from <c>TransactionTypes</c>).</param>
+        /// <param name="referenceId">Reference to the round, or <c>null</c> for deposit/withdrawal.</param>
         private async Task<Result<WalletDto>> ApplyAsync(int userId, decimal delta, int typeId, string? referenceId)
         {
             var wallet = await _db.Wallets.FirstOrDefaultAsync(w => w.UserId == userId);

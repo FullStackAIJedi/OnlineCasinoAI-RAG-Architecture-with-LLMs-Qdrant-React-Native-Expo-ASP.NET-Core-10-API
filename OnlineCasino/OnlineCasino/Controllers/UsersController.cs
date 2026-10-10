@@ -7,10 +7,10 @@
     using OnlineCasino.Services;
 
     /// <summary>
-    /// Управление на потребители.
+    /// User management.
     /// <para>
-    /// Endpoints с <c>/me</c> работят върху текущо логнатия потребител (от JWT claims).
-    /// Endpoints без <c>/me</c> изискват роля <c>Admin</c>.
+    /// Endpoints with <c>/me</c> operate on the currently logged-in user (from JWT claims).
+    /// Endpoints without <c>/me</c> require the <c>Admin</c> role.
     /// </para>
     /// </summary>
     [Authorize]
@@ -18,13 +18,17 @@
     {
         private readonly IUserService _users;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UsersController"/> class.
+        /// </summary>
+        /// <param name="users">The user service used for all profile operations.</param>
         public UsersController(IUserService users) => _users = users;
 
         /// <summary>
-        /// Връща профила на текущо логнатия потребител.
+        /// Returns the profile of the currently logged-in user.
         /// <para>
-        /// Включва: id, email, nickname, firstName, lastName, role, createdAt.
-        /// Не включва чувствителни данни (password hash, internal flags).
+        /// Includes: id, email, nickname, firstName, lastName, role, createdAt.
+        /// Does not include sensitive data (password hash, internal flags).
         /// </para>
         /// </summary>
         [HttpGet("me")]
@@ -37,16 +41,16 @@
         }
 
         /// <summary>
-        /// Обновява профила на текущо логнатия потребител.
+        /// Updates the profile of the currently logged-in user.
         /// <para>
-        /// Позволени полета: <c>FirstName</c>, <c>LastName</c>.
-        /// Ако поле е <c>null</c> – текущата стойност се запазва (partial update).
+        /// Allowed fields: <c>FirstName</c>, <c>LastName</c>.
+        /// If a field is <c>null</c> – the current value is preserved (partial update).
         /// </para>
         /// <para>
-        /// Email, NickName и Role <b>не</b> могат да се променят през този endpoint.
+        /// Email, NickName, and Role <b>cannot</b> be changed through this endpoint.
         /// </para>
         /// </summary>
-        /// <param name="req">Заявка с <c>FirstName</c> и/или <c>LastName</c>.</param>
+        /// <param name="req">Request containing <c>FirstName</c> and/or <c>LastName</c>.</param>
         [HttpPut("me")]
         public async Task<IActionResult> UpdateMe([FromBody] UpdateProfileRequest req)
         {
@@ -57,13 +61,13 @@
         }
 
         /// <summary>
-        /// Изтрива (hard delete) акаунта на текущо логнатия потребител.
+        /// Deletes (hard delete) the account of the currently logged-in user.
         /// <para>
-        /// Демо решение – cascade-ва всички свързани записи (wallet, transactions, rounds).
-        /// В production трябва да е soft delete + GDPR анонимизация.
+        /// Demo solution – cascades all related records (wallet, transactions, rounds).
+        /// In production, this should be a soft delete + GDPR anonymization.
         /// </para>
         /// <para>
-        /// След успех клиентът трябва да изчисти auth cookie-то си локално.
+        /// After success, the client should clear its auth cookie locally.
         /// </para>
         /// </summary>
         [HttpDelete("me")]
@@ -76,10 +80,10 @@
         }
 
         /// <summary>
-        /// Връща списък с всички потребители (Admin only).
+        /// Returns a list of all users (Admin only).
         /// <para>
-        /// Включва: id, email, nickname, role, isBlocked, balance.
-        /// Без pagination – за демо.
+        /// Includes: id, email, nickname, role, isBlocked, balance.
+        /// No pagination – for demo purposes.
         /// </para>
         /// </summary>
         [HttpGet]
@@ -88,22 +92,22 @@
             => AsActionResult(await _users.GetAllAsync());
 
         /// <summary>
-        /// Блокира потребител (Admin only).
+        /// Blocks a user (Admin only).
         /// <para>
-        /// Блокиран потребител не може да се логне – <c>SignInAsync</c> връща 403.
-        /// Съществуващите JWT токени остават валидни до изтичане (демо решение).
+        /// A blocked user cannot sign in – <c>SignInAsync</c> returns 403.
+        /// Existing JWT tokens remain valid until they expire (demo solution).
         /// </para>
         /// </summary>
-        /// <param name="userId">Id на потребителя за блокиране.</param>
+        /// <param name="userId">ID of the user to block.</param>
         [HttpPost("{userId:int}/block")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Block([FromRoute] int userId)
             => AsActionResult(await _users.SetBlockedAsync(userId, true));
 
         /// <summary>
-        /// Отблокира потребител (Admin only).
+        /// Unblocks a user (Admin only).
         /// </summary>
-        /// <param name="userId">Id на потребителя за отблокиране.</param>
+        /// <param name="userId">ID of the user to unblock.</param>
         [HttpPost("{userId:int}/unblock")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Unblock([FromRoute] int userId)

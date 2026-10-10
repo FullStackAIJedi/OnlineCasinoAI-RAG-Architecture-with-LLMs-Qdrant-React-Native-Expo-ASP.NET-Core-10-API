@@ -6,14 +6,14 @@
     using OnlineCasino.Services;
 
     /// <summary>
-    /// История на изиграните рундове за текущия потребител.
+    /// History of played rounds for the current user.
     /// <para>
-    /// Всички endpoints връщат само рундове на логнатия потребител – ownership check-ът
-    /// е вграден в заявките чрез <c>userId</c>.
+    /// All endpoints return only rounds belonging to the logged-in user – the ownership check
+    /// is built into the queries via <c>userId</c>.
     /// </para>
     /// <para>
-    /// Резултатите са сортирани по <c>CreatedAt</c> descending (най-новите първи)
-    /// и поддържат pagination чрез <c>page</c> и <c>pageSize</c>.
+    /// Results are sorted by <c>CreatedAt</c> descending (newest first)
+    /// and support pagination via <c>page</c> and <c>pageSize</c>.
     /// </para>
     /// </summary>
     [Authorize]
@@ -22,6 +22,10 @@
     {
         private readonly IGameHistoryService _history;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GameHistoryController"/> class.
+        /// </summary>
+        /// <param name="history">The game history service used to retrieve rounds.</param>
         public GameHistoryController(IGameHistoryService history) => _history = history;
 
         /// <summary>
@@ -46,11 +50,11 @@
         }
 
         /// <summary>
-        /// Връща пагинирана история само на Slots рундове.
-        /// <para>Shorthand за <c>GET /api/game-history?game=slots</c>.</para>
+        /// Returns a paginated history of Slots rounds only.
+        /// <para>Shorthand for <c>GET /api/game-history?game=slots</c>.</para>
         /// </summary>
-        /// <param name="page">Номер на страница (започва от 1). Default: 1.</param>
-        /// <param name="pageSize">Брой записи на страница (1–100). Default: 20.</param>
+        /// <param name="page">Page number (starts from 1). Default: 1.</param>
+        /// <param name="pageSize">Number of records per page (1–100). Default: 20.</param>
         [HttpGet("slots")]
         public async Task<IActionResult> GetSlots([FromQuery] int page = 1, [FromQuery] int pageSize = 20)
         {
@@ -60,11 +64,11 @@
         }
 
         /// <summary>
-        /// Връща пагинирана история само на Roulette рундове.
-        /// <para>Shorthand за <c>GET /api/game-history?game=roulette</c>.</para>
+        /// Returns a paginated history of Roulette rounds only.
+        /// <para>Shorthand for <c>GET /api/game-history?game=roulette</c>.</para>
         /// </summary>
-        /// <param name="page">Номер на страница (започва от 1). Default: 1.</param>
-        /// <param name="pageSize">Брой записи на страница (1–100). Default: 20.</param>
+        /// <param name="page">Page number (starts from 1). Default: 1.</param>
+        /// <param name="pageSize">Number of records per page (1–100). Default: 20.</param>
         [HttpGet("roulette")]
         public async Task<IActionResult> GetRoulette([FromQuery] int page = 1, [FromQuery] int pageSize = 20)
         {
@@ -74,11 +78,11 @@
         }
 
         /// <summary>
-        /// Връща пагинирана история само на Blackjack рундове.
-        /// <para>Shorthand за <c>GET /api/game-history?game=blackjack</c>.</para>
+        /// Returns a paginated history of Blackjack rounds only.
+        /// <para>Shorthand for <c>GET /api/game-history?game=blackjack</c>.</para>
         /// </summary>
-        /// <param name="page">Номер на страница (започва от 1). Default: 1.</param>
-        /// <param name="pageSize">Брой записи на страница (1–100). Default: 20.</param>
+        /// <param name="page">Page number (starts from 1). Default: 1.</param>
+        /// <param name="pageSize">Number of records per page (1–100). Default: 20.</param>
         [HttpGet("blackjack")]
         public async Task<IActionResult> GetBlackjack([FromQuery] int page = 1, [FromQuery] int pageSize = 20)
         {
@@ -88,13 +92,13 @@
         }
 
         /// <summary>
-        /// Връща детайли за конкретен рунд по неговия публичен идентификатор.
+        /// Returns details for a specific round by its public identifier.
         /// <para>
-        /// Ownership check – връща 404, ако рундът не съществува или не принадлежи на текущия потребител
-        /// (не 403, за да не изтича информация дали даден roundId съществува).
+        /// Ownership check – returns 404 if the round does not exist or does not belong to the current user
+        /// (not 403, to avoid leaking information about whether a given roundId exists).
         /// </para>
         /// </summary>
-        /// <param name="roundId">Публичният идентификатор на рунда (<c>PublicId</c>).</param>
+        /// <param name="roundId">The public identifier of the round (<c>PublicId</c>).</param>
         [HttpGet("{roundId}")]
         public async Task<IActionResult> GetRound([FromRoute] string roundId)
         {

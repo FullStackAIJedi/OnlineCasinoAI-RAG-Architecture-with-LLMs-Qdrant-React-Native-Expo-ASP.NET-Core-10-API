@@ -7,18 +7,18 @@
     using OnlineCasino.Services;
 
     /// <summary>
-    /// Roulette endpoints – залагане, преглед на текущи залози и завъртане на колелото.
+    /// Roulette endpoints – placing bets, viewing current bets, and spinning the wheel.
     /// <para>
-    /// Играта е двуфазна:
+    /// The game is two-phase:
     /// <list type="number">
-    ///   <item>Играчът поставя един или повече залози чрез <c>POST /bet</c>.</item>
-    ///   <item>Играчът завърта колелото чрез <c>POST /spin</c> – тогава сървърът удържа общата сума,
-    ///         генерира печелившото число и изплаща печалбите.</item>
+    ///   <item>The player places one or more bets via <c>POST /bet</c>.</item>
+    ///   <item>The player spins the wheel via <c>POST /spin</c> – then the server deducts the total amount,
+    ///         generates the winning number, and pays out the winnings.</item>
     /// </list>
     /// </para>
     /// <para>
-    /// Залозите се пазят в <c>RouletteBets</c> таблицата, докато не се spin-не.
-    /// Клиентът <b>никога</b> не изпраща payout – сървърът изчислява всичко.
+    /// Bets are kept in the <c>RouletteBets</c> table until a spin occurs.
+    /// The client <b>never</b> sends the payout – the server calculates everything.
     /// </para>
     /// </summary>
     [Authorize]
@@ -27,16 +27,20 @@
     {
         private readonly IRouletteService _roulette;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RouletteController"/> class.
+        /// </summary>
+        /// <param name="roulette">The roulette service used to place bets and spin the wheel.</param>
         public RouletteController(IRouletteService roulette) => _roulette = roulette;
 
         /// <summary>
-        /// Връща текущите неизиграни залози на потребителя за тази игра.
+        /// Returns the user's current unresolved bets for this game.
         /// <para>
-        /// Използва се от React Native, за да рендерира вече поставените залози
-        /// върху масата преди spin.
+        /// Used by React Native to render the already placed bets
+        /// on the table before a spin.
         /// </para>
         /// </summary>
-        /// <param name="gameCode">Код на играта (напр. <c>"roulette"</c>).</param>
+        /// <param name="gameCode">Game code (e.g. <c>"roulette"</c>).</param>
         [HttpGet("{gameCode}/bets")]
         public async Task<IActionResult> GetBets([FromRoute] string gameCode)
         {
@@ -46,27 +50,27 @@
         }
 
         /// <summary>
-        /// Поставя нов залог. Може да се вика многократно преди spin.
+        /// Places a new bet. Can be called multiple times before a spin.
         /// <para>
-        /// Валидации:
+        /// Validations:
         /// <list type="bullet">
-        ///   <item>Залогът трябва да е положителен.</item>
-        ///   <item>Типът залог трябва да съществува в <c>RouletteBetTypes</c>.</item>
-        ///   <item>За <c>number</c> – стойността трябва да е 0–36.</item>
-        ///   <item>За <c>dozen</c> – стойността трябва да е 1, 2 или 3.</item>
-        ///   <item>Балансът трябва да покрива текущите неизиграни залози + новия залог.</item>
+        ///   <item>The bet must be positive.</item>
+        ///   <item>The bet type must exist in <c>RouletteBetTypes</c>.</item>
+        ///   <item>For <c>number</c> – the value must be 0–37 (37 = 00).</item>
+        ///   <item>For <c>dozen</c> – the value must be 1, 2, or 3.</item>
+        ///   <item>The balance must cover the current unresolved bets + the new bet.</item>
         /// </list>
-        /// Парите <b>още не се удържат</b> – това става при spin.
+        /// The money is <b>not deducted yet</b> – that happens on spin.
         /// </para>
         /// </summary>
-        /// <param name="gameCode">Код на играта (напр. <c>"roulette"</c>).</param>
+        /// <param name="gameCode">Game code (e.g. <c>"roulette"</c>).</param>
         /// <param name="req">
-        /// Заявка с полета:
+        /// Request containing:
         /// <list type="bullet">
         ///   <item><c>Type</c> – <c>"red"</c>, <c>"black"</c>, <c>"even"</c>, <c>"odd"</c>,
         ///         <c>"low"</c>, <c>"high"</c>, <c>"dozen"</c>, <c>"number"</c>.</item>
-        ///   <item><c>Value</c> – само за <c>number</c> (0–36) и <c>dozen</c> (1–3).</item>
-        ///   <item><c>Amount</c> – сумата на залога.</item>
+        ///   <item><c>Value</c> – only for <c>number</c> (0–37, where 37 = 00) and <c>dozen</c> (1–3).</item>
+        ///   <item><c>Amount</c> – the bet amount.</item>
         /// </list>
         /// </param>
         [HttpPost("{gameCode}/bet")]
@@ -78,15 +82,15 @@
         }
 
         /// <summary>
-        /// Завърта колелото – удържа общата сума на всички текущи залози, генерира печелившото
-        /// число (0–36) и изплаща печалбите според типа на всеки залог.
+        /// Spins the wheel – deducts the total amount of all current bets, generates the winning
+        /// number (0–37, where 37 = 00), and pays out the winnings according to each bet's type.
         /// <para>
-        /// След успешен spin всички текущи залози на потребителя се изтриват.
-        /// Записва се <c>GameRound</c> с общия залог, общата печалба и резултата
+        /// After a successful spin, all of the user's current bets are deleted.
+        /// A <c>GameRound</c> is saved with the total bet, total win, and the result
         /// (<c>Win</c> / <c>Lose</c> / <c>Push</c>).
         /// </para>
         /// <para>
-        /// Payout таблица:
+        /// Payout table:
         /// <list type="bullet">
         ///   <item><c>red</c>, <c>black</c>, <c>even</c>, <c>odd</c>, <c>low</c>, <c>high</c> → 2×</item>
         ///   <item><c>dozen</c> → 3×</item>
@@ -94,10 +98,10 @@
         /// </list>
         /// </para>
         /// </summary>
-        /// <param name="gameCode">Код на играта (напр. <c>"roulette"</c>).</param>
+        /// <param name="gameCode">Game code (e.g. <c>"roulette"</c>).</param>
         /// <param name="req">
-        /// Заявка с <c>ClientRoundId</c> – уникален идентификатор от клиента,
-        /// използван за идемпотентност (предпазва от двойно завъртане при retry).
+        /// Request containing <c>ClientRoundId</c> – a unique client-generated identifier
+        /// used for idempotency (prevents double spins on retry).
         /// </param>
         [HttpPost("{gameCode}/spin")]
         public async Task<IActionResult> Spin([FromRoute] string gameCode, [FromBody] SpinRouletteRequest req)

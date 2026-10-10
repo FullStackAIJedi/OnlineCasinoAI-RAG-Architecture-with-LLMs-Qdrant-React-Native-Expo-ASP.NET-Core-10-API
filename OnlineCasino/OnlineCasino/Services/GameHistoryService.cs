@@ -8,61 +8,64 @@
     using OnlineCasino.Models;
 
     /// <summary>
-    /// История на изиграните рундове за даден потребител.
+    /// History of played rounds for a given user.
     /// <para>
-    /// Всички заявки са ограничени до <c>userId</c> – ownership check-ът е вграден в
-    /// <c>Where</c> клаузата, а не в отделна проверка.
+    /// All queries are scoped to <c>userId</c> – the ownership check is built into the
+    /// <c>Where</c> clause, rather than a separate check.
     /// </para>
     /// <para>
-    /// Резултатите са сортирани по <c>CreatedAt</c> descending (най-новите първи).
+    /// Results are sorted by <c>CreatedAt</c> descending (newest first).
     /// </para>
     /// </summary>
     public interface IGameHistoryService
     {
         /// <summary>
-        /// Връща пагинирана история на рундовете на потребителя.
+        /// Returns a paginated history of the user's rounds.
         /// <para>
-        /// Може да се филтрира по код на игра (напр. <c>"slots"</c>, <c>"roulette"</c>,
-        /// <c>"blackjack"</c>). Ако <paramref name="gameCode"/> е <c>null</c> или празен –
-        /// връща всички игри.
+        /// Can be filtered by game code (e.g. <c>"slots"</c>, <c>"roulette"</c>,
+        /// <c>"blackjack"</c>). If <paramref name="gameCode"/> is <c>null</c> or empty –
+        /// returns all games.
         /// </para>
         /// </summary>
-        /// <param name="userId">Id на потребителя (от JWT).</param>
-        /// <param name="gameCode">Опционален филтър по код на игра.</param>
-        /// <param name="page">Номер на страница (започва от 1). Стойности &lt; 1 се нормализират към 1.</param>
-        /// <param name="pageSize">Брой записи на страница. Нормализира се към 1–100, default 20.</param>
-        /// <returns><see cref="PagedResult{T}"/> от <see cref="GameRoundDto"/>.</returns>
+        /// <param name="userId">User ID (from JWT).</param>
+        /// <param name="gameCode">Optional filter by game code.</param>
+        /// <param name="page">Page number (starts at 1). Values &lt; 1 are normalized to 1.</param>
+        /// <param name="pageSize">Number of records per page. Normalized to 1–100, default 20.</param>
+        /// <returns><see cref="PagedResult{T}"/> of <see cref="GameRoundDto"/>.</returns>
         Task<Result<PagedResult<GameRoundDto>>> GetAsync(int userId, string? gameCode, int page, int pageSize);
 
         /// <summary>
-        /// Връща детайли за конкретен рунд по неговия <c>PublicId</c>.
+        /// Returns details for a specific round by its <c>PublicId</c>.
         /// <para>
-        /// Ownership check – ако рундът не съществува или не принадлежи на потребителя,
-        /// връща <c>404 Not Found</c> (не 403, за да не изтича информация).
+        /// Ownership check – if the round does not exist or does not belong to the user,
+        /// returns <c>404 Not Found</c> (not 403, to avoid leaking information).
         /// </para>
         /// </summary>
-        /// <param name="userId">Id на потребителя.</param>
-        /// <param name="roundId">Публичен идентификатор на рунда.</param>
+        /// <param name="userId">User ID.</param>
+        /// <param name="roundId">Public identifier of the round.</param>
         Task<Result<GameRoundDto>> GetByRoundIdAsync(int userId, string roundId);
     }
 
     /// <summary>
-    /// Имплементация на <see cref="IGameHistoryService"/>.
+    /// Implementation of <see cref="IGameHistoryService"/>.
     /// <para>
-    /// Всички заявки използват projection директно към DTO – без <c>Include</c>,
-    /// без зареждане на цели entities.
+    /// All queries use projection directly to DTO – no <c>Include</c>,
+    /// no loading of full entities.
     /// </para>
     /// </summary>
     public class GameHistoryService : IGameHistoryService
     {
         private readonly AppDbContext _db;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GameHistoryService"/> class.
+        /// </summary>
+        /// <param name="db">The application database context.</param>
         public GameHistoryService(AppDbContext db) => _db = db;
 
         /// <inheritdoc />
         public async Task<Result<PagedResult<GameRoundDto>>> GetAsync(int userId, string? gameCode, int page, int pageSize)
-        {
-            // Нормализация на пагинацията
+        { 
             if (page < 1) page = 1;
             if (pageSize < 1 || pageSize > 100) pageSize = 20;
 

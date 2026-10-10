@@ -7,14 +7,14 @@
     using OnlineCasino.Services;
 
     /// <summary>
-    /// Slots endpoints – завъртане на барабаните.
+    /// Slots endpoints – spinning the reels.
     /// <para>
-    /// Играта е еднофазна: играчът изпраща залог + <c>ClientRoundId</c>,
-    /// сървърът удържа залога, генерира 3 символа (RNG), изчислява печалбата
-    /// и я кредитира обратно в wallet-а.
+    /// The game is single-phase: the player sends a bet + <c>ClientRoundId</c>,
+    /// the server deducts the bet, generates the reels (RNG), calculates the win,
+    /// and credits it back to the wallet.
     /// </para>
     /// <para>
-    /// Клиентът <b>никога</b> не изпраща резултата от барабаните – сървърът генерира всичко.
+    /// The client <b>never</b> sends the reel outcome – the server generates everything.
     /// </para>
     /// </summary>
     [Authorize]
@@ -23,29 +23,34 @@
     {
         private readonly ISlotsService _slots;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SlotsController"/> class.
+        /// </summary>
+        /// <param name="slots">The slots service used to execute spins.</param>
         public SlotsController(ISlotsService slots) => _slots = slots;
 
         /// <summary>
-        /// Завърта барабаните.
+        /// Spins the reels.
         /// <para>
-        /// Процес:
+        /// Process:
         /// <list type="number">
-        ///   <item>Валидира залога спрямо min/max на играта.</item>
-        ///   <item>Удържа залога от wallet-а (с <c>TransactionType = Bet</c>).</item>
-        ///   <item>Генерира 3 символа чрез претеглен RNG (<c>SlotSymbols.Weight</c>).</item>
-        ///   <item>Ако трите символа съвпадат → печалба = <c>BetAmount × Payout3</c> на символа.</item>
-        ///   <item>Кредитира печалбата (ако има такава) с <c>TransactionType = Win</c>.</item>
-        ///   <item>Записва <c>GameRound</c> с резултата (<c>Win</c> / <c>Lose</c>).</item>
+        ///   <item>Validates the bet against the game's min/max.</item>
+        ///   <item>Deducts the bet from the wallet (with <c>TransactionType = Bet</c>).</item>
+        ///   <item>Generates the reels via weighted RNG (<c>SlotSymbols.Weight</c>).</item>
+        ///   <item>If all reels match → win = <c>BetAmount × Payout{N}</c> for the symbol
+        ///         (where N = ReelsCount, or N-1 for a partial match).</item>
+        ///   <item>Credits the win (if any) with <c>TransactionType = Win</c>.</item>
+        ///   <item>Saves a <c>GameRound</c> with the result (<c>Win</c> / <c>Lose</c>).</item>
         /// </list>
         /// </para>
         /// </summary>
-        /// <param name="gameCode">Код на играта (напр. <c>"slots"</c>).</param>
+        /// <param name="gameCode">Game code (e.g. <c>"slots"</c> or <c>"slots4"</c>).</param>
         /// <param name="req">
-        /// Заявка с полета:
+        /// Request containing:
         /// <list type="bullet">
-        ///   <item><c>BetAmount</c> – залогът (трябва да е в min/max границите).</item>
-        ///   <item><c>ClientRoundId</c> – уникален идентификатор от клиента, използван за
-        ///         идемпотентност и за референция в <c>Transactions.ReferenceId</c>.</item>
+        ///   <item><c>BetAmount</c> – the bet (must be within the min/max bounds).</item>
+        ///   <item><c>ClientRoundId</c> – a unique client-generated identifier used for
+        ///         idempotency and as a reference in <c>Transactions.ReferenceId</c>.</item>
         /// </list>
         /// </param>
         [HttpPost("{gameCode}/spin")]

@@ -10,71 +10,76 @@
     using OnlineCasino.Models;
 
     /// <summary>
-    /// Blackjack service – stateful игра с теглене на карти, hit / stand / double.
+    /// Blackjack service – a stateful game with card drawing, hit / stand / double.
     /// <para>
-    /// Сървърът пази ръцете на играча и дилъра в <c>BlackjackSessions</c>.
-    /// Клиентът <b>никога</b> не изпраща карти – само действия.
+    /// The server keeps the player's and dealer's hands in <c>BlackjackSessions</c>.
+    /// The client <b>never</b> sends cards – only actions.
+    /// </para>
+    /// <para>    /// All cards are generated via <see cref="Random.Shared"/> (for demo purposes).
+    /// In production, a cryptographic RNG should be used.
     /// </para>
     /// <para>
-    /// Всички карти се генерират чрез <see cref="Random.Shared"/> (за демо).
-    /// В production трябва да е cryptographic RNG.
-    /// </para>
-    /// <para>
-    /// Payout правила:
+    /// Payout rules:
     /// <list type="bullet">
-    ///   <item>Blackjack (21 на първите 2 карти) → 2.5× залога.</item>
-    ///   <item>Обикновена победа → 2× залога.</item>
-    ///   <item>Push (равенство) → връща се залогът (1×).</item>
-    ///   <item>Загуба / Bust → 0.</item>
+    ///   <item>Blackjack (21 on the first 2 cards) → 2.5× the bet.</item>
+    ///   <item>Regular win → 2× the bet.</item>
+    ///   <item>Push (tie) → the bet is returned (1×).</item>
+    ///   <item>Loss / Bust → 0.</item>
     /// </list>
     /// </para>
     /// </summary>
     public interface IBlackjackService
     {
         /// <summary>
-        /// Стартира нова Blackjack сесия – удържа залога, тегли по 2 карти на играча и дилъра
-        /// и връща началното състояние.
-        /// <para>Ако играчът веднага направи 21 (blackjack) – рундът приключва веднага с печалба 2.5×.</para>
+        /// Starts a new Blackjack session – deducts the bet, draws 2 cards each for the player
+        /// and the dealer, and returns the initial state.
+        /// <para>If the player immediately hits 21 (blackjack) – the round ends immediately with a 2.5× payout.</para>
         /// </summary>
-        /// <param name="userId">Id на потребителя (от JWT).</param>
-        /// <param name="gameCode">Код на играта (напр. <c>"blackjack"</c>).</param>
-        /// <param name="req">Заявка с <c>BetAmount</c>.</param>
+        /// <param name="userId">User ID (from JWT).</param>
+        /// <param name="gameCode">Game code (e.g. <c>"blackjack"</c>).</param>
+        /// <param name="req">Request containing <c>BetAmount</c>.</param>
         Task<Result<BlackjackStateDto>> StartAsync(int userId, string gameCode, StartBlackjackRequest req);
 
         /// <summary>
-        /// Играчът тегли още една карта.
+        /// The player draws another card.
         /// <para>
-        /// Ако резултатът надхвърли 21 → Bust (загуба), сесията приключва.
-        /// Ако стане точно 21 → дилърът играе и сесията приключва.
-        /// Иначе играта продължава с <c>PlayerTurn</c>.
+        /// If the total exceeds 21 → Bust (loss), the session ends.
+        /// If it becomes exactly 21 → the dealer plays and the session ends.
+        /// Otherwise, the game continues with <c>PlayerTurn</c>.
         /// </para>
         /// </summary>
-        /// <param name="userId">Id на потребителя.</param>
-        /// <param name="sessionId">Публичен идентификатор на сесията.</param>
+        /// <param name="userId">User ID.</param>
+        /// <param name="sessionId">Public identifier of the session.</param>
         Task<Result<BlackjackStateDto>> HitAsync(int userId, string sessionId);
 
         /// <summary>
-        /// Играчът спира да тегли. Дилърът тегли карти, докато достигне поне 17,
-        /// след което се определя победителят и се сетълва залога.
+        /// The player stops drawing. The dealer draws cards until reaching at least 17,
+        /// after which the winner is determined and the bet is settled.
         /// </summary>
+        /// <param name="userId">User ID.</param>
+        /// <param name="sessionId">Public identifier of the session.</param>
         Task<Result<BlackjackStateDto>> StandAsync(int userId, string sessionId);
 
         /// <summary>
-        /// Удвоява залога, тегли точно една карта и автоматично приключва рунда.
-        /// <para>Позволено само на първите две карти на играча.</para>
+        /// Doubles the bet, draws exactly one card, and automatically ends the round.
+        /// <para>Only allowed on the player's first two cards.</para>
         /// </summary>
+        /// <param name="userId">User ID.</param>
+        /// <param name="sessionId">Public identifier of the session.</param>
         Task<Result<BlackjackStateDto>> DoubleAsync(int userId, string sessionId);
 
         /// <summary>
-        /// Връща текущото състояние на сесията без да променя нищо.
-        /// <para>Полезно при reconnect от React Native.</para>
-        /// <para>Втората карта на дилъра се показва като <c>"?"</c>, докато рундът не приключи.</para>
+        /// Returns the current session state without changing anything.
+        /// <para>Useful for reconnect from React Native.</para>
+        /// <para>The dealer's second card is shown as <c>"?"</c> until the round is finished.</para>
         /// </summary>
+        /// <param name="userId">User ID.</param>
+        /// <param name="sessionId">Public identifier of the session.</param>
         Task<Result<BlackjackStateDto>> GetStateAsync(int userId, string sessionId);
     }
 
     /// <summary>
-    /// Имплементация на <see cref="IBlackjackService"/>.
+    /// Implementation of <see cref="IBlackjackService"/>.
     /// </summary>
     public class BlackjackService : IBlackjackService
     {
@@ -90,7 +95,18 @@
             _wallet = wallet;
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Starts a new Blackjack session – deducts the bet, draws 2 cards each for the player
+        /// and the dealer, and returns the initial state.
+        /// <para>If the player immediately hits 21 (blackjack) – the round ends immediately with a 2.5× payout.</para>
+        /// </summary>
+        /// <param name="userId">User ID (from JWT).</param>
+        /// <param name="gameCode">Game code (e.g. <c>"blackjack"</c>).</param>
+        /// <param name="req">Request containing <c>BetAmount</c>.</param>
+        /// <returns>
+        /// A <see cref="Result{T}"/> containing the initial <see cref="BlackjackStateDto"/> on success,
+        /// or an error message and status code on failure.
+        /// </returns>
         public async Task<Result<BlackjackStateDto>> StartAsync(int userId, string gameCode, StartBlackjackRequest req)
         {
             if (req.BetAmount <= 0)
@@ -161,7 +177,20 @@
             return Result<BlackjackStateDto>.Success(BuildState(session, balance, result, winAmount));
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// The player draws another card.
+        /// <para>
+        /// If the total exceeds 21 → Bust (loss), the session ends.
+        /// If it becomes exactly 21 → the dealer plays and the session ends.
+        /// Otherwise, the game continues with <c>PlayerTurn</c>.
+        /// </para>
+        /// </summary>
+        /// <param name="userId">User ID.</param>
+        /// <param name="sessionId">Public identifier of the session.</param>
+        /// <returns>
+        /// A <see cref="Result{T}"/> containing the updated <see cref="BlackjackStateDto"/> on success,
+        /// or an error message and status code on failure.
+        /// </returns>
         public async Task<Result<BlackjackStateDto>> HitAsync(int userId, string sessionId)
         {
             var session = await LoadSessionAsync(userId, sessionId);
@@ -212,7 +241,16 @@
             return Result<BlackjackStateDto>.Success(BuildState(s, balance, result, winAmount));
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// The player stops drawing. The dealer draws cards until reaching at least 17,
+        /// after which the winner is determined and the bet is settled.
+        /// </summary>
+        /// <param name="userId">User ID.</param>
+        /// <param name="sessionId">Public identifier of the session.</param>
+        /// <returns>
+        /// A <see cref="Result{T}"/> containing the final <see cref="BlackjackStateDto"/> on success,
+        /// or an error message and status code on failure.
+        /// </returns>
         public async Task<Result<BlackjackStateDto>> StandAsync(int userId, string sessionId)
         {
             var session = await LoadSessionAsync(userId, sessionId);
@@ -247,7 +285,16 @@
             return Result<BlackjackStateDto>.Success(BuildState(s, balance, result, winAmount));
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Doubles the bet, draws exactly one card, and automatically ends the round.
+        /// <para>Only allowed on the player's first two cards.</para>
+        /// </summary>
+        /// <param name="userId">User ID.</param>
+        /// <param name="sessionId">Public identifier of the session.</param>
+        /// <returns>
+        /// A <see cref="Result{T}"/> containing the final <see cref="BlackjackStateDto"/> on success,
+        /// or an error message and status code on failure.
+        /// </returns>
         public async Task<Result<BlackjackStateDto>> DoubleAsync(int userId, string sessionId)
         {
             var session = await LoadSessionAsync(userId, sessionId);
@@ -296,7 +343,17 @@
             return Result<BlackjackStateDto>.Success(BuildState(s, balance, result, winAmount));
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Returns the current session state without changing anything.
+        /// <para>Useful for reconnect from React Native.</para>
+        /// <para>The dealer's second card is shown as <c>"?"</c> until the round is finished.</para>
+        /// </summary>
+        /// <param name="userId">User ID.</param>
+        /// <param name="sessionId">Public identifier of the session.</param>
+        /// <returns>
+        /// A <see cref="Result{T}"/> containing the current <see cref="BlackjackStateDto"/> on success,
+        /// or an error message and status code on failure.
+        /// </returns>
         public async Task<Result<BlackjackStateDto>> GetStateAsync(int userId, string sessionId)
         {
             var session = await LoadSessionAsync(userId, sessionId);
@@ -310,9 +367,15 @@
         // --- helpers ---
 
         /// <summary>
-        /// Зарежда сесия по <c>PublicId</c> и <c>userId</c> (ownership check).
-        /// <para>Връща 404 при липса – не 403, за да не изтича информация.</para>
+        /// Loads a session by <c>PublicId</c> and <c>userId</c> (ownership check).
+        /// <para>Returns 404 if not found – not 403, to avoid leaking information.</para>
         /// </summary>
+        /// <param name="userId">User ID.</param>
+        /// <param name="publicId">Public identifier of the session.</param>
+        /// <returns>
+        /// A <see cref="Result{T}"/> containing the <see cref="BlackjackSession"/> on success,
+        /// or an error message and status code on failure.
+        /// </returns>
         private async Task<Result<BlackjackSession>> LoadSessionAsync(int userId, string publicId)
         {
             var s = await _db.BlackjackSessions
@@ -339,8 +402,9 @@
         }
 
         /// <summary>
-        /// Дилърът тегли карти, докато достигне 17 или повече (stand на soft 17).
+        /// The dealer draws cards until reaching 17 or more (stands on soft 17).
         /// </summary>
+        /// <param name="s">The current Blackjack session.</param>
         private async Task PlayDealerAsync(BlackjackSession s)
         {
             var dealer = s.DealerHand.Split(',').ToList();
@@ -350,12 +414,14 @@
             }
             s.DealerHand = string.Join(",", dealer);
             s.DealerScore = CalculateScore(dealer);
-            await Task.CompletedTask;  // методът е async за консистентност
+            await Task.CompletedTask;   
         }
 
         /// <summary>
-        /// Определя резултата от рунда: <c>Win</c> / <c>Lose</c> / <c>Push</c>.
+        /// Determines the round result: <c>Win</c> / <c>Lose</c> / <c>Push</c>.
         /// </summary>
+        /// <param name="s">The current Blackjack session.</param>
+        /// <returns>The result name as a string.</returns>
         private static string ResolveResult(BlackjackSession s)
         {
             if (s.PlayerScore > 21) return "Lose";
@@ -366,8 +432,14 @@
         }
 
         /// <summary>
-        /// Записва <c>GameRound</c> в историята с детайли за ръцете на играча и дилъра.
+        /// Saves a <c>GameRound</c> to the history with details about the player's and dealer's hands.
         /// </summary>
+        /// <param name="userId">User ID.</param>
+        /// <param name="gameId">Game ID.</param>
+        /// <param name="bet">The total bet amount.</param>
+        /// <param name="win">The total win amount.</param>
+        /// <param name="s">The current Blackjack session.</param>
+        /// <param name="result">The result name (Win / Lose / Push), or null if unresolved.</param>
         private async Task SaveRoundAsync(int userId, int gameId, decimal bet, decimal win, BlackjackSession s, string? result)
         {
             var resultId = await _db.RoundResults
@@ -393,15 +465,20 @@
             });
         }
 
-        /// <summary>Връща Id на статус по код (напр. <c>"PlayerTurn"</c>).</summary>
+        /// <summary>Returns the ID of a status by its code (e.g. <c>"PlayerTurn"</c>).</summary>
+        /// <param name="code">The status code.</param>
+        /// <returns>The status ID.</returns>
         private async Task<int> StatusIdAsync(string code)
             => await _db.BlackjackStatuses.Where(s => s.Code == code).Select(s => s.Id).FirstAsync();
 
-        /// <summary>Връща текущия баланс на потребителя.</summary>
+        /// <summary>Returns the current balance of the user.</summary>
+        /// <param name="userId">User ID.</param>
+        /// <returns>The user's current wallet balance.</returns>
         private async Task<decimal> GetBalanceAsync(int userId)
             => await _db.Wallets.Where(w => w.UserId == userId).Select(w => w.Balance).FirstAsync();
 
-        /// <summary>Тегли случайна карта (ранг + боя), напр. <c>"A♠"</c>.</summary>
+        /// <summary>Draws a random card (rank + suit), e.g. <c>"A♠"</c>.</summary>
+        /// <returns>A string representing the drawn card.</returns>
         private static string DrawCard()
         {
             var rank = Ranks[Random.Shared.Next(Ranks.Length)];
@@ -410,8 +487,10 @@
         }
 
         /// <summary>
-        /// Изчислява стойността на ръка. Ace се брои като 11, освен ако не води до bust → 1.
+        /// Calculates the value of a hand. An Ace counts as 11, unless that would cause a bust → 1.
         /// </summary>
+        /// <param name="hand">The list of cards in the hand.</param>
+        /// <returns>The total score of the hand.</returns>
         private static int CalculateScore(List<string> hand)
         {
             int total = 0;
@@ -428,9 +507,14 @@
         }
 
         /// <summary>
-        /// Сглобява <see cref="BlackjackStateDto"/> за връщане към клиента.
-        /// <para>Скрива втората карта на дилъра с <c>"?"</c>, ако рундът не е приключил.</para>
+        /// Builds a <see cref="BlackjackStateDto"/> to return to the client.
+        /// <para>Hides the dealer's second card with <c>"?"</c> if the round is not finished.</para>
         /// </summary>
+        /// <param name="s">The current Blackjack session.</param>
+        /// <param name="balance">The user's current balance.</param>
+        /// <param name="result">The result name (Win / Lose / Push), or null if unresolved.</param>
+        /// <param name="winAmount">The total win amount.</param>
+        /// <returns>A <see cref="BlackjackStateDto"/> representing the current state.</returns>
         private static BlackjackStateDto BuildState(BlackjackSession s, decimal balance, string? result, decimal winAmount)
         {
             var player = s.PlayerHand.Split(',').ToList();

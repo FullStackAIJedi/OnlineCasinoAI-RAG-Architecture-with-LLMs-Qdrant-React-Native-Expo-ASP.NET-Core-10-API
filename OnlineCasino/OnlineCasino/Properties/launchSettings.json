@@ -48,7 +48,7 @@
       "commandName": "Docker",
       "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Production",
+        "ASPNETCORE_ENVIRONMENT": "Development",
         "ConnectionStrings__Default": "Data Source=/app/data/casino.db",
         "Jwt__Key": "super-secret-key-for-demo-min-32-chars!!"
       },

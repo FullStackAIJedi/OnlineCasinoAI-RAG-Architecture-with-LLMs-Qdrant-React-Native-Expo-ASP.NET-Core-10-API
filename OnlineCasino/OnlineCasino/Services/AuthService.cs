@@ -15,51 +15,51 @@
     using OnlineCasino.Models;
 
     /// <summary>
-    /// Authentication service – регистрация, логин и смяна на парола.
+    /// Authentication service – registration, login, and password change.
     /// <para>
-    /// Генерира JWT токени с claims: <c>sub</c>, <c>NameIdentifier</c>, <c>email</c>,
-    /// <c>nickname</c>, <c>role</c>. Токенът се записва в HttpOnly cookie от контролера.
+    /// Generates JWT tokens with claims: <c>sub</c>, <c>NameIdentifier</c>, <c>email</c>,
+    /// <c>nickname</c>, <c>role</c>. The token is written to an HttpOnly cookie by the controller.
     /// </para>
     /// <para>
-    /// Паролите се хешират с BCrypt. Никога не се логват или връщат в response.
+    /// Passwords are hashed with BCrypt. They are never logged or returned in a response.
     /// </para>
     /// </summary>
     public interface IAuthService
     {
         /// <summary>
-        /// Регистрира нов потребител с роля <c>User</c> и начален wallet (демо бонус 1000 EUR).
+        /// Registers a new user with the <c>User</c> role and an initial wallet (demo bonus of 1000 EUR).
         /// </summary>
         /// <param name="req">Email, NickName, Password.</param>
         /// <returns>
-        /// При успех – JWT токен + дата на изтичане.
-        /// При грешка – <c>409 Conflict</c> ако email или nickname вече съществуват.
+        /// On success – a JWT token + expiration date.
+        /// On failure – <c>409 Conflict</c> if the email or nickname already exists.
         /// </returns>
         Task<Result<(string Token, DateTime Expires)>> SignUpAsync(SignUpRequest req);
 
         /// <summary>
-        /// Логва съществуващ потребител.
+        /// Logs in an existing user.
         /// </summary>
-        /// <param name="req">Email и Password.</param>
+        /// <param name="req">Email and Password.</param>
         /// <returns>
-        /// При успех – JWT токен + дата на изтичане.
-        /// При грешка – <c>401</c> (грешни credentials) или <c>403</c> (блокиран акаунт).
+        /// On success – a JWT token + expiration date.
+        /// On failure – <c>401</c> (invalid credentials) or <c>403</c> (blocked account).
         /// </returns>
         Task<Result<(string Token, DateTime Expires)>> SignInAsync(SignInRequest req);
 
         /// <summary>
-        /// Сменя паролата на потребителя след проверка на текущата парола.
+        /// Changes the user's password after verifying the current password.
         /// </summary>
-        /// <param name="userId">Id на потребителя (от JWT claims).</param>
-        /// <param name="req">CurrentPassword и NewPassword.</param>
+        /// <param name="userId">User ID (from JWT claims).</param>
+        /// <param name="req">CurrentPassword and NewPassword.</param>
         /// <returns>
-        /// При успех – <c>true</c>.
-        /// При грешка – <c>400</c> (грешна текуща парола) или <c>404</c> (потребителят не е намерен).
+        /// On success – <c>true</c>.
+        /// On failure – <c>400</c> (incorrect current password) or <c>404</c> (user not found).
         /// </returns>
         Task<Result<bool>> ChangePasswordAsync(int userId, ChangePasswordRequest req);
     }
 
     /// <summary>
-    /// Имплементация на <see cref="IAuthService"/>.
+    /// Implementation of <see cref="IAuthService"/>.
     /// </summary>
     public class AuthService : IAuthService
     {
@@ -67,6 +67,12 @@
         private readonly IConfiguration _cfg;
         private readonly IMapper _mapper;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AuthService"/> class.
+        /// </summary>
+        /// <param name="db">The application database context.</param>
+        /// <param name="cfg">The application configuration (used for JWT settings).</param>
+        /// <param name="mapper">The AutoMapper instance used to map request DTOs to entities.</param>
         public AuthService(AppDbContext db, IConfiguration cfg, IMapper mapper)
         {
             _db = db;
@@ -74,7 +80,14 @@
             _mapper = mapper;
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Registers a new user with the <c>User</c> role and an initial wallet (demo bonus of 1000 EUR).
+        /// </summary>
+        /// <param name="req">Email, NickName, Password.</param>
+        /// <returns>
+        /// On success – a JWT token + expiration date.
+        /// On failure – <c>409 Conflict</c> if the email or nickname already exists.
+        /// </returns>
         public async Task<Result<(string Token, DateTime Expires)>> SignUpAsync(SignUpRequest req)
         {
             if (await _db.Users.AnyAsync(u => u.Email == req.Email))
@@ -99,7 +112,14 @@
             return Result<(string, DateTime)>.Success(GenerateToken(user, "User"));
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Logs in an existing user.
+        /// </summary>
+        /// <param name="req">Email and Password.</param>
+        /// <returns>
+        /// On success – a JWT token + expiration date.
+        /// On failure – <c>401</c> (invalid credentials) or <c>403</c> (blocked account).
+        /// </returns>
         public async Task<Result<(string Token, DateTime Expires)>> SignInAsync(SignInRequest req)
         {
             // Projection – вземаме само нужните полета + role name, без Include
@@ -126,7 +146,15 @@
             return Result<(string, DateTime)>.Success(GenerateToken(entity, user.RoleName));
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Changes the user's password after verifying the current password.
+        /// </summary>
+        /// <param name="userId">User ID (from JWT claims).</param>
+        /// <param name="req">CurrentPassword and NewPassword.</param>
+        /// <returns>
+        /// On success – <c>true</c>.
+        /// On failure – <c>400</c> (incorrect current password) or <c>404</c> (user not found).
+        /// </returns>
         public async Task<Result<bool>> ChangePasswordAsync(int userId, ChangePasswordRequest req)
         {
             var user = await _db.Users.FindAsync(userId);
@@ -142,21 +170,21 @@
         }
 
         /// <summary>
-        /// Генерира JWT токен с claims от потребителя и ролята му.
+        /// Generates a JWT token with claims from the user and their role.
         /// <para>
         /// Claims:
         /// <list type="bullet">
         ///   <item><c>sub</c> – user id (JWT standard).</item>
-        ///   <item><c>NameIdentifier</c> – user id (използва се от <c>GetUserId()</c>).</item>
-        ///   <item><c>email</c> – имейл на потребителя.</item>
+        ///   <item><c>NameIdentifier</c> – user id (used by <c>GetUserId()</c>).</item>
+        ///   <item><c>email</c> – user's email.</item>
         ///   <item><c>nickname</c> – nickname (custom claim).</item>
-        ///   <item><c>role</c> – роля (User / Admin).</item>
+        ///   <item><c>role</c> – role (User / Admin).</item>
         /// </list>
         /// </para>
         /// </summary>
-        /// <param name="user">Потребител (може да е частичен entity – важно е Id, Email, NickName).</param>
-        /// <param name="role">Име на ролята (<c>"User"</c> или <c>"Admin"</c>).</param>
-        /// <returns>Tuple от (JWT токен като string, UTC дата на изтичане).</returns>
+        /// <param name="user">User (may be a partial entity – only Id, Email, NickName matter).</param>
+        /// <param name="role">Role name (<c>"User"</c> or <c>"Admin"</c>).</param>
+        /// <returns>A tuple of (JWT token as string, UTC expiration date).</returns>
         private (string, DateTime) GenerateToken(User user, string role)
         {
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_cfg["Jwt:Key"]!));

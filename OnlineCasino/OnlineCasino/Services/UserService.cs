@@ -1,92 +1,94 @@
 ﻿namespace OnlineCasino.Services
-{
-    using AutoMapper;
+{ 
     using Microsoft.EntityFrameworkCore;
+
+    using AutoMapper;
+
     using OnlineCasino.Data;
     using OnlineCasino.DTOs.Users;
     using OnlineCasino.Models;
-
+     
     /// <summary>
-    /// User service – профил, администрация и блокиране на потребители.
+    /// User service – profile management, administration, and user blocking.
     /// <para>
-    /// Всички заявки използват projection директно към DTO – без <c>Include</c>,
-    /// без зареждане на цели entities.
+    /// All queries use direct projection to DTOs – without <c>Include</c>,
+    /// without loading entire entities.
     /// </para>
     /// <para>
-    /// Методите <see cref="GetAllAsync"/> и <see cref="SetBlockedAsync"/> са предназначени
-    /// за Admin endpoints. Останалите работят върху текущо логнатия потребител.
+    /// The <see cref="GetAllAsync"/> and <see cref="SetBlockedAsync"/> methods are intended
+    /// for Admin endpoints. The remaining methods operate on the currently logged-in user.
     /// </para>
-    /// </summary>
+    /// </summary> 
     public interface IUserService
     {
         /// <summary>
-        /// Връща профила на потребителя по неговото id.
+        /// Returns the user's profile by their ID.
         /// <para>
-        /// Включва: id, email, nickname, firstName, lastName, role, createdAt.
-        /// Не включва чувствителни данни (password hash, internal flags).
+        /// Includes: ID, email, nickname, first name, last name, role, and creation date.
+        /// Excludes sensitive data (password hash, internal flags).
         /// </para>
         /// </summary>
-        /// <param name="userId">Id на потребителя (от JWT).</param>
+        /// <param name="userId">User ID (from JWT).</param>
         /// <returns>
-        /// <see cref="UserProfileDto"/> при успех;
-        /// <c>404 Not Found</c> ако потребителят не съществува.
-        /// </returns>
+        /// <see cref="UserProfileDto"/> on success;
+        /// <c>404 Not Found</c> if the user does not exist.
+        /// </returns> 
         Task<Result<UserProfileDto>> GetProfileAsync(int userId);
 
         /// <summary>
-        /// Обновява профила на потребителя (partial update).
+        /// Updates the user's profile (partial update).
         /// <para>
-        /// Позволени полета: <c>FirstName</c>, <c>LastName</c>.
-        /// Ако поле е <c>null</c> – текущата стойност се запазва.
+        /// Allowed fields: <c>FirstName</c>, <c>LastName</c>.
+        /// If a field is <c>null</c>, its current value is preserved.
         /// </para>
         /// <para>
-        /// Email, NickName и Role <b>не</b> могат да се променят през този метод.
+        /// Email, NickName, and Role cannot be changed through this method.
         /// </para>
         /// </summary>
-        /// <param name="userId">Id на потребителя.</param>
-        /// <param name="req">Заявка с <c>FirstName</c> и/или <c>LastName</c>.</param>
-        /// <returns>Обновения профил след успешен update.</returns>
+        /// <param name="userId">User ID.</param>
+        /// <param name="req">Request containing <c>FirstName</c> and/or <c>LastName</c>.</param>
+        /// <returns>The updated profile after a successful update.</returns> 
         Task<Result<UserProfileDto>> UpdateProfileAsync(int userId, UpdateProfileRequest req);
 
         /// <summary>
-        /// Изтрива (hard delete) акаунта на потребителя.
+        /// Deletes the user's account (hard delete).
         /// <para>
-        /// Демо решение – cascade-ва всички свързани записи (wallet, transactions, rounds, sessions).
-        /// В production трябва да е soft delete + GDPR анонимизация, за да се запази
-        /// историята на транзакциите за одит.
+        /// Demo implementation – cascades deletion to all related records (wallet, transactions, rounds, sessions).
+        /// In production, this should be a soft delete combined with GDPR anonymization to preserve
+        /// transaction history for auditing purposes.
         /// </para>
         /// </summary>
-        /// <param name="userId">Id на потребителя.</param>
+        /// <param name="userId">User ID.</param> 
         Task<Result<bool>> DeleteAccountAsync(int userId);
 
         /// <summary>
-        /// Връща списък с всички потребители (Admin only).
+        /// Returns a list of all users (Admin only).
         /// <para>
-        /// Включва: id, email, nickname, role, isBlocked, balance.
-        /// Без pagination – за демо.
+        /// Includes: ID, email, nickname, role, blocked status, and balance.
+        /// No pagination – for demo purposes.
         /// </para>
-        /// </summary>
+        /// </summary> 
         Task<Result<List<UserListItemDto>>> GetAllAsync();
 
         /// <summary>
-        /// Блокира или отблокира потребител.
+        /// Blocks or unblocks a user.
         /// <para>
-        /// Блокиран потребител не може да се логне – <c>SignInAsync</c> връща 403.
-        /// Съществуващите JWT токени остават валидни до изтичане (демо решение).
+        /// A blocked user cannot log in – <c>SignInAsync</c> returns 403.
+        /// Existing JWT tokens remain valid until they expire (demo implementation).
         /// </para>
         /// </summary>
-        /// <param name="userId">Id на потребителя.</param>
-        /// <param name="blocked"><c>true</c> за блокиране, <c>false</c> за отблокиране.</param>
+        /// <param name="userId">User ID.</param>
+        /// <param name="blocked"><c>true</c> to block, <c>false</c> to unblock.</param> 
         Task<Result<bool>> SetBlockedAsync(int userId, bool blocked);
     }
 
     /// <summary>
-    /// Имплементация на <see cref="IUserService"/>.
+    /// Implementation of <see cref="IUserService"/>.
     /// <para>
-    /// Използва <see cref="IMapper"/> само за mapping в update операциите, където
-    /// projection не е достатъчен. Всички read-only заявки ползват директна проекция.
+    /// Uses <see cref="IMapper"/> only for mapping in update operations where
+    /// projection is insufficient. All read-only queries use direct projection.
     /// </para>
-    /// </summary>
+    /// </summary> 
     public class UserService : IUserService
     {
         private readonly AppDbContext _db;

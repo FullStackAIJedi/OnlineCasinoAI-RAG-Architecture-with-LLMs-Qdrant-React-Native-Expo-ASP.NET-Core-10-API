@@ -11,7 +11,7 @@
       - ./data:/app/data
     
     environment:
-      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_ENVIRONMENT: Development
       ASPNETCORE_URLS: http://+:8080
       ConnectionStrings__Default: "Data Source=/app/data/casino.db"
       Jwt__Key: "super-secret-key-for-demo-min-32-chars!!"

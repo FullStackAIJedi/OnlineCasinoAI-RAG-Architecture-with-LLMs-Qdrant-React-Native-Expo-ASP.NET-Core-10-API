@@ -9,7 +9,7 @@
         public int GameId { get; set; }
         public decimal BetAmount { get; set; }
 
-        public string PlayerHand { get; set; } = "";  // "A♠,7♥"
+        public string PlayerHand { get; set; } = "";   
         public string DealerHand { get; set; } = "";
         public int PlayerScore { get; set; }
         public int DealerScore { get; set; }

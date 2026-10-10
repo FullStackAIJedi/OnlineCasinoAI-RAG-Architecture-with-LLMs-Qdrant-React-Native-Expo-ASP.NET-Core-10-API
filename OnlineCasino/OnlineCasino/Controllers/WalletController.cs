@@ -7,15 +7,15 @@
     using OnlineCasino.Services;
 
     /// <summary>
-    /// Wallet endpoints – баланс, история на транзакции и демо deposit/withdraw.
+    /// Wallet endpoints – balance, transaction history, and demo deposit/withdraw.
     /// <para>
-    /// Всички endpoints работят върху wallet-а на текущо логнатия потребител.
-    /// Балансът се променя <b>само</b> през <see cref="IWalletService"/> – никога директно.
+    /// All endpoints operate on the wallet of the currently logged-in user.
+    /// The balance is changed <b>only</b> via <see cref="IWalletService"/> – never directly.
     /// </para>
     /// <para>
-    /// Deposit и Withdraw са <b>демо</b> – изпълняват се instant, без payment provider,
-    /// без webhook, без admin approval. В production тези операции минават през
-    /// payment gateway и webhook-ове.
+    /// Deposit and Withdraw are <b>demo</b> – they execute instantly, without a payment provider,
+    /// without webhooks, without admin approval. In production, these operations go through
+    /// a payment gateway and webhooks.
     /// </para>
     /// </summary>
     [Authorize]
@@ -23,13 +23,17 @@
     {
         private readonly IWalletService _wallet;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="WalletController"/> class.
+        /// </summary>
+        /// <param name="wallet">The wallet service used for all balance operations.</param>
         public WalletController(IWalletService wallet) => _wallet = wallet;
 
         /// <summary>
-        /// Връща текущия баланс и валутата на потребителя.
+        /// Returns the user's current balance and currency.
         /// <para>
-        /// Използва се от React Native за header-а (баланс в горния ъгъл)
-        /// и за валидация преди залог.
+        /// Used by React Native for the header (balance in the top corner)
+        /// and for validation before placing a bet.
         /// </para>
         /// </summary>
         [HttpGet]
@@ -41,17 +45,17 @@
         }
 
         /// <summary>
-        /// Връща пагинирана история на транзакциите на потребителя.
+        /// Returns a paginated history of the user's transactions.
         /// <para>
-        /// Всяка транзакция съдържа: тип (<c>Deposit</c>, <c>Withdraw</c>, <c>Bet</c>, <c>Win</c>),
-        /// сума (със знак), баланс след операцията и timestamp.
+        /// Each transaction contains: type (<c>Deposit</c>, <c>Withdraw</c>, <c>Bet</c>, <c>Win</c>),
+        /// amount (with sign), balance after the operation, and timestamp.
         /// </para>
         /// <para>
-        /// Сортирани по <c>CreatedAt</c> descending (най-новите първи).
+        /// Sorted by <c>CreatedAt</c> descending (newest first).
         /// </para>
         /// </summary>
-        /// <param name="page">Номер на страница (започва от 1). Default: 1.</param>
-        /// <param name="pageSize">Брой записи на страница (1–100). Default: 20.</param>
+        /// <param name="page">Page number (starts at 1). Default: 1.</param>
+        /// <param name="pageSize">Number of records per page (1–100). Default: 20.</param>
         [HttpGet("transactions")]
         public async Task<IActionResult> Transactions([FromQuery] int page = 1, [FromQuery] int pageSize = 20)
         {
@@ -61,15 +65,15 @@
         }
 
         /// <summary>
-        /// Демо депозит – кредитира сумата веднага, без payment provider.
+        /// Demo deposit – credits the amount instantly, without a payment provider.
         /// <para>
-        /// Създава <c>Transaction</c> с тип <c>Deposit</c> и референция <c>null</c>.
+        /// Creates a <c>Transaction</c> with type <c>Deposit</c> and a <c>null</c> reference.
         /// </para>
         /// <para>
-        /// В production този endpoint трябва да създава pending payment и да чака webhook.
+        /// In production, this endpoint should create a pending payment and wait for a webhook.
         /// </para>
         /// </summary>
-        /// <param name="req">Заявка с <c>Amount</c> (трябва да е положителна).</param>
+        /// <param name="req">Request containing <c>Amount</c> (must be positive).</param>
         [HttpPost("deposit")]
         public async Task<IActionResult> Deposit([FromBody] MoneyRequest req)
         {
@@ -79,16 +83,16 @@
         }
 
         /// <summary>
-        /// Демо withdraw – дебитира сумата веднага, ако има достатъчен баланс.
+        /// Demo withdraw – debits the amount instantly, if there is sufficient balance.
         /// <para>
-        /// Създава <c>Transaction</c> с тип <c>Withdraw</c> и отрицателна сума.
+        /// Creates a <c>Transaction</c> with type <c>Withdraw</c> and a negative amount.
         /// </para>
         /// <para>
-        /// В production този endpoint трябва да създава pending withdrawal,
-        /// който минава през Finance approval и payment provider.
+        /// In production, this endpoint should create a pending withdrawal
+        /// that goes through Finance approval and a payment provider.
         /// </para>
         /// </summary>
-        /// <param name="req">Заявка с <c>Amount</c> (трябва да е положителна и ≤ баланса).</param>
+        /// <param name="req">Request containing <c>Amount</c> (must be positive and ≤ the balance).</param>
         [HttpPost("withdraw")]
         public async Task<IActionResult> Withdraw([FromBody] MoneyRequest req)
         {
