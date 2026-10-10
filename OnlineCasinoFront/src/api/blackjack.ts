@@ -44,9 +44,12 @@ export const blackjackApi = {
    * @returns The final game state as `BlackjackState`.
    */
   stand: (sessionId: string) =>
-    apiFetch<BlackjackState>(`/api/games/blackjack/sessions/${sessionId}/stand`, {
-      method: "POST",
-    }),
+    apiFetch<BlackjackState>(
+      `/api/games/blackjack/sessions/${sessionId}/stand`,
+      {
+        method: "POST",
+      },
+    ),
 
   /**
    * Doubles the player's bet ("double down") and deals exactly one more card.
@@ -57,9 +60,12 @@ export const blackjackApi = {
    * @returns The updated game state as `BlackjackState`.
    */
   double: (sessionId: string) =>
-    apiFetch<BlackjackState>(`/api/games/blackjack/sessions/${sessionId}/double`, {
-      method: "POST",
-    }),
+    apiFetch<BlackjackState>(
+      `/api/games/blackjack/sessions/${sessionId}/double`,
+      {
+        method: "POST",
+      },
+    ),
 
   /**
    * Fetches the current state of an existing Blackjack session.

@@ -15,7 +15,8 @@ import type { StartBlackjackRequest } from "../api/types";
 export const useStartBlackjack = (gameCode: string) => {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: (data: StartBlackjackRequest) => blackjackApi.start(gameCode, data),
+    mutationFn: (data: StartBlackjackRequest) =>
+      blackjackApi.start(gameCode, data),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["wallet"] });
     },

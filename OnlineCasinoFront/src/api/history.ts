@@ -8,7 +8,6 @@ import type { GameRound, PagedResult } from "./types";
  * plus lookup of a single round by its ID.
  */
 export const historyApi = {
-
   /**
    * Fetches a paginated list of the user's game history.
    *

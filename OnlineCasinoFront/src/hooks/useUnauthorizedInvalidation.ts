@@ -8,7 +8,7 @@ import { AUTH_QUERY_KEYS } from "../constants/authKeys";
  * Subscribes to unauthorized (401) events from the API client and
  * invalidates auth-related queries so auth state is re-evaluated.
  *
- * Intended to be used once, in the root layout (e.g. inside AuthGuard).
+ * Intended to be used once, in the root layout.
  */
 export function useUnauthorizedInvalidation() {
   const qc = useQueryClient();

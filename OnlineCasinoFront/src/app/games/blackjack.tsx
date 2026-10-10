@@ -1,5 +1,11 @@
 import { useState } from "react";
-import { ImageBackground, ScrollView, StyleSheet, Text, View } from "react-native";
+import {
+  ImageBackground,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -9,7 +15,12 @@ import { Input } from "../../../src/components/ui/Input";
 import { Button } from "../../../src/components/ui/Button";
 import { PlayingCard } from "../../../src/components/blackjack/PlayingCard";
 
-import { useStartBlackjack, useHit, useStand, useDouble } from "../../../src/hooks/useBlackjack";
+import {
+  useStartBlackjack,
+  useHit,
+  useStand,
+  useDouble,
+} from "../../../src/hooks/useBlackjack";
 import { useWallet } from "../../../src/hooks/useWallet";
 
 type BlackjackAction = "hit" | "stand" | "double";
@@ -23,7 +34,7 @@ const DEFAULT_BET = "10";
  *
  * Handles bet input, game state, and player actions (hit, stand, double).
  *
- * @returns The Blackjack screen.
+ * @returns The rendered Blackjack screen.
  */
 export default function BlackjackScreen() {
   const theme = useTheme();
@@ -77,7 +88,7 @@ export default function BlackjackScreen() {
           setResultColor(theme.danger);
           setResultText(err.message || "Failed to start game");
         },
-      }
+      },
     );
   };
 
@@ -125,7 +136,9 @@ export default function BlackjackScreen() {
               { backgroundColor: theme.card, borderColor: theme.border },
             ]}
           >
-            <Text style={{ color: theme.text, fontWeight: "800", fontSize: 18 }}>
+            <Text
+              style={{ color: theme.text, fontWeight: "800", fontSize: 18 }}
+            >
               {wallet?.balance.toFixed(2) ?? "0.00"} {wallet?.currency ?? "EUR"}
             </Text>
           </View>
@@ -133,7 +146,9 @@ export default function BlackjackScreen() {
           {state && (
             <>
               <View>
-                <Text style={[styles.handTitle, { color: theme.textSecondary }]}>
+                <Text
+                  style={[styles.handTitle, { color: theme.textSecondary }]}
+                >
                   Dealer:{" "}
                   {state.status === "Finished" ? `${state.dealerScore}` : ""}
                 </Text>
@@ -145,7 +160,9 @@ export default function BlackjackScreen() {
               </View>
 
               <View>
-                <Text style={[styles.handTitle, { color: theme.textSecondary }]}>
+                <Text
+                  style={[styles.handTitle, { color: theme.textSecondary }]}
+                >
                   You: {state.playerScore}
                 </Text>
                 <View style={styles.cards}>

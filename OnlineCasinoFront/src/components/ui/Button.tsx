@@ -54,7 +54,7 @@ export const Button = ({
             style={[
               styles.text,
               { color: theme.text, marginLeft: icon ? 8 : 0 },
-              textStyle,   
+              textStyle,
             ]}
           >
             {title}

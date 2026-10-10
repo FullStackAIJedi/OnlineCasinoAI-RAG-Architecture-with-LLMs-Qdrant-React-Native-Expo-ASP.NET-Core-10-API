@@ -11,7 +11,6 @@ import type { UpdateProfileRequest, UserListItem, UserProfile } from "./types";
  *   require an elevated role (enforced server-side).
  */
 export const usersApi = {
-
   /**
    * Fetches the current user's full profile.
    *

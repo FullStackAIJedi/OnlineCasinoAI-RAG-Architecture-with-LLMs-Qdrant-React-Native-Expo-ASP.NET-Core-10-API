@@ -1,0 +1,45 @@
+# Node
+node_modules/
+*.log
+npm-debug.log*
+yarn-error.log*
+
+# Expo
+.expo/
+dist/
+web-build/
+*.orig.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+
+# Env
+.env
+.env.local
+.env.*.local
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# .NET
+bin/
+obj/
+*.user
+.vs/
+
+# SQLite
+*.db
+*.db-shm
+*.db-wal
+
+# Git backup
+**/.git-backup/

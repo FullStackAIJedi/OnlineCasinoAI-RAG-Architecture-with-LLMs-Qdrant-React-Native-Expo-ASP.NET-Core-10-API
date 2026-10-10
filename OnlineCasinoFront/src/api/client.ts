@@ -1,12 +1,21 @@
 import * as SecureStore from "expo-secure-store";
+
 import { ApiError } from "./errors";
 import type { ErrorResponse } from "./types";
 
 /** Base URL of the backend API. */
-const BASE_URL = "http://192.168.100.21:8080";
+const BASE_URL = process.env.EXPO_PUBLIC_API_URL;
+if (!BASE_URL) {
+  throw new Error(
+    "EXPO_PUBLIC_API_URL is not set. Create a .env file in the project root.",
+  );
+}
 
 /** SecureStore key under which the auth cookie is persisted. */
 const COOKIE_KEY = "access_token_cookie";
+
+/** Request timeout in milliseconds. */
+const REQUEST_TIMEOUT_MS = 15000;
 
 /**
  * Options accepted by {@link apiFetch}.
@@ -15,10 +24,12 @@ const COOKIE_KEY = "access_token_cookie";
  * that is automatically JSON-serialized.
  */
 interface FetchOptions extends Omit<RequestInit, "body"> {
+  /** Request body, automatically JSON-serialized. */
   body?: unknown;
-  skipAuth?: boolean; // за login/register
+  /** Skip attaching the stored auth cookie (used by public endpoints). */
+  skipAuth?: boolean;
 }
- 
+
 type Listener = () => void;
 const unauthorizedListeners = new Set<Listener>();
 
@@ -42,7 +53,7 @@ export function onUnauthorized(listener: Listener): () => void {
 function emitUnauthorized(): void {
   unauthorizedListeners.forEach((l) => l());
 }
- 
+
 /**
  * Performs an HTTP request against the backend API.
  *
@@ -54,35 +65,54 @@ function emitUnauthorized(): void {
  * - On 401, clears the stored cookie and emits an "unauthorized" event
  *   so listeners can react (e.g. redirect to login).
  *
- * @param path    - API path, relative to {@link BASE_URL} (e.g. `/api/auth/me`).
+ * @param path - API path, relative to {@link BASE_URL} (e.g. `/api/auth/me`).
  * @param options - Fetch options plus app-specific flags (`skipAuth`, `body`).
  * @returns The parsed response body, typed as `T`.
  * @throws {ApiError} For any non-2xx response.
  */
-async function apiFetch<T>(path: string, options: FetchOptions = {}): Promise<T> {
+async function apiFetch<T>(
+  path: string,
+  options: FetchOptions = {},
+): Promise<T> {
   const { body, headers, skipAuth, ...rest } = options;
   const url = `${BASE_URL}${path}`;
- 
-  const savedCookie = skipAuth ? null : await SecureStore.getItemAsync(COOKIE_KEY); 
 
-  const res = await fetch(url, {
-    ...rest,
-    credentials: "include",
-    headers: {
-      Accept: "application/json",
-      ...(savedCookie ? { Cookie: savedCookie } : {}),
-      ...(body ? { "Content-Type": "application/json" } : {}),
-      ...headers,
-    },
-    body: body ? JSON.stringify(body) : undefined,
-  }); 
- 
+  const savedCookie = skipAuth
+    ? null
+    : await SecureStore.getItemAsync(COOKIE_KEY);
+
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+
+  let res: Response;
+  try {
+    res = await fetch(url, {
+      ...rest,
+      signal: controller.signal,
+      credentials: "include",
+      headers: {
+        Accept: "application/json",
+        ...(savedCookie ? { Cookie: savedCookie } : {}),
+        ...(body ? { "Content-Type": "application/json" } : {}),
+        ...headers,
+      },
+      body: body ? JSON.stringify(body) : undefined,
+    });
+  } catch (e) {
+    if (e instanceof Error && e.name === "AbortError") {
+      throw new ApiError(408, "Request timed out");
+    }
+    throw e;
+  } finally {
+    clearTimeout(timeoutId);
+  }
+
   const setCookie = res.headers.get("set-cookie");
   if (setCookie) {
     const match = setCookie.match(/access_token=([^;]+)/);
     if (match) {
       const cookieValue = `access_token=${match[1]}`;
-      await SecureStore.setItemAsync(COOKIE_KEY, cookieValue); 
+      await SecureStore.setItemAsync(COOKIE_KEY, cookieValue);
     }
   }
 
@@ -93,9 +123,9 @@ async function apiFetch<T>(path: string, options: FetchOptions = {}): Promise<T>
   const text = await res.text();
   const data = text ? safeJsonParse(text) : null;
 
-  if (!res.ok) { 
+  if (!res.ok) {
     if (res.status === 401) {
-      await SecureStore.deleteItemAsync(COOKIE_KEY); 
+      await SecureStore.deleteItemAsync(COOKIE_KEY);
       if (!skipAuth) {
         emitUnauthorized();
       }
@@ -121,6 +151,9 @@ async function apiFetch<T>(path: string, options: FetchOptions = {}): Promise<T>
  *
  * Used to tolerate non-JSON responses (HTML error pages, plain text, etc.)
  * without crashing the request pipeline.
+ *
+ * @param text - The raw response text.
+ * @returns The parsed value, or the original string.
  */
 function safeJsonParse(text: string): unknown {
   try {
@@ -136,7 +169,7 @@ function safeJsonParse(text: string): unknown {
  * Used on explicit logout and whenever the server reports the session
  * as invalid.
  */
-export async function clearCookie() {
+export async function clearCookie(): Promise<void> {
   await SecureStore.deleteItemAsync(COOKIE_KEY);
 }
 

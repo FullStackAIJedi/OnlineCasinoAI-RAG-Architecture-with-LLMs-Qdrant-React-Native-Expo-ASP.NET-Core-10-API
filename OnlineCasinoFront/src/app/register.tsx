@@ -1,10 +1,18 @@
 import { useState } from "react";
-import { ImageBackground, KeyboardAvoidingView, Platform,
-  ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  ImageBackground,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { useRouter } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
-
 import { Ionicons } from "@expo/vector-icons";
+
 import { Input } from "../../src/components/ui/Input";
 import { Button } from "../../src/components/ui/Button";
 import { Modal } from "../../src/components/ui/Modal";
@@ -12,6 +20,14 @@ import { Modal } from "../../src/components/ui/Modal";
 import { useRegister } from "../../src/hooks/useAuth";
 import { useTheme } from "../../src/theme/ThemeProvider";
 
+/**
+ * Registration screen.
+ *
+ * On successful sign-up, auth state is invalidated and Expo Router
+ * redirects the user to the main app via `Stack.Protected`.
+ *
+ * @returns The rendered registration screen.
+ */
 export default function RegisterScreen() {
   const theme = useTheme();
   const router = useRouter();
@@ -19,12 +35,18 @@ export default function RegisterScreen() {
   const [email, setEmail] = useState("");
   const [nickName, setNickName] = useState("");
   const [password, setPassword] = useState("");
-
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [successVisible, setSuccessVisible] = useState(false);
 
   const register = useRegister();
 
+  /**
+   * Registration screen.
+   *
+   * On successful sign-up, auth state is invalidated and Expo Router
+   * redirects the user to the main app via `Stack.Protected`.
+   *
+   * @returns The rendered registration screen.
+   */
   const handleRegister = () => {
     if (!email || !nickName || !password) {
       setErrorMessage("Please fill in all fields.");
@@ -34,15 +56,11 @@ export default function RegisterScreen() {
     register.mutate(
       { email, nickName, password },
       {
-        onSuccess: () => setSuccessVisible(true),
-        onError: (err) => setErrorMessage(err.message || "Registration failed"),
-      }
+        onError: (err) => {
+          setErrorMessage(err.message || "Registration failed");
+        },
+      },
     );
-  };
-
-  const handleSuccessClose = () => {
-    setSuccessVisible(false);
-    router.replace("/(tabs)");
   };
 
   return (
@@ -56,9 +74,12 @@ export default function RegisterScreen() {
       <SafeAreaView style={styles.container}>
         <KeyboardAvoidingView
           behavior={Platform.OS === "ios" ? "padding" : "height"}
-          style={{ flex: 1 }}
+          style={styles.flex}
         >
-          <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
+          <ScrollView
+            contentContainerStyle={styles.scroll}
+            showsVerticalScrollIndicator={false}
+          >
             <TouchableOpacity onPress={() => router.back()} style={styles.back}>
               <Ionicons name="arrow-back" size={24} color="#fff" />
             </TouchableOpacity>
@@ -74,7 +95,11 @@ export default function RegisterScreen() {
               keyboardType="email-address"
               autoCapitalize="none"
             />
-            <Input value={nickName} onChangeText={setNickName} placeholder="Nickname" />
+            <Input
+              value={nickName}
+              onChangeText={setNickName}
+              placeholder="Nickname"
+            />
             <Input
               value={password}
               onChangeText={setPassword}
@@ -108,18 +133,6 @@ export default function RegisterScreen() {
         </Text>
         <Button title="OK" onPress={() => setErrorMessage(null)} />
       </Modal>
-
-      <Modal
-        visible={successVisible}
-        onClose={handleSuccessClose}
-        title="Welcome!"
-        variant="success"
-      >
-        <Text style={[styles.modalText, { color: theme.text }]}>
-          Your account has been created successfully.
-        </Text>
-        <Button title="Continue" onPress={handleSuccessClose} />
-      </Modal>
     </ImageBackground>
   );
 }
@@ -131,6 +144,7 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(41, 40, 90, 0.55)",
   },
   container: { flex: 1 },
+  flex: { flex: 1 },
   scroll: { padding: 24, flexGrow: 1, justifyContent: "center" },
   back: { position: "absolute", top: 8, left: 8, padding: 8, zIndex: 10 },
   header: { alignItems: "center", marginBottom: 40 },

@@ -1,8 +1,4 @@
-import {
-  QueryClient,
-  QueryCache,
-  MutationCache,
-} from "@tanstack/react-query";
+import { QueryClient, QueryCache, MutationCache } from "@tanstack/react-query";
 
 import { ApiError } from "../api/errors";
 import { AUTH_QUERY_KEYS } from "../constants/authKeys";

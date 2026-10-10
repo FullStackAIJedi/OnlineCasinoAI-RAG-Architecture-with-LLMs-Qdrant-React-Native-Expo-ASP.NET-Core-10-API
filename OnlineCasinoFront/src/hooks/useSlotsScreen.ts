@@ -43,7 +43,7 @@ export function useSlotsScreen({
   const [lastWin, setLastWin] = useState(0);
   const [pendingResult, setPendingResult] = useState<SpinResponse | null>(null);
   const [optimisticBalance, setOptimisticBalance] = useState<number | null>(
-    null
+    null,
   );
 
   const spinTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -71,7 +71,7 @@ export function useSlotsScreen({
       setOptimisticBalance(null);
       refetchWallet();
       return clearSpinTimer;
-    }, [refetchWallet, clearSpinTimer])
+    }, [refetchWallet, clearSpinTimer]),
   );
 
   const validateBet = useCallback((): number | null => {
@@ -130,7 +130,7 @@ export function useSlotsScreen({
           if (remaining > 0) {
             spinTimerRef.current = setTimeout(
               () => finishSpin(data),
-              remaining
+              remaining,
             );
           } else {
             finishSpin(data);
@@ -143,7 +143,7 @@ export function useSlotsScreen({
           setError(err.message);
           await syncWallet();
         },
-      }
+      },
     );
   }, [
     validateBet,
@@ -173,7 +173,7 @@ export function useSlotsScreen({
       setBet(t);
       if (error) setError(undefined);
     },
-    [error]
+    [error],
   );
 
   return {

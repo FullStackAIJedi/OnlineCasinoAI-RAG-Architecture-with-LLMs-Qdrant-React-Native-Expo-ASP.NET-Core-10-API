@@ -10,24 +10,24 @@ export const lightColors = {
   success: "#13ef17",
   warning: "#ff890a",
   overlay: "#13031f",
-  clean: "#FFFFFF", 
-  barIcon: "#979798",  
+  clean: "#FFFFFF",
+  barIcon: "#979798",
 };
 
 export const darkColors: typeof lightColors = {
-  background: "#0c0115",  
-  card: "#0c0115",  
+  background: "#0c0115",
+  card: "#0c0115",
   text: "#FFFFFF",
   textSecondary: "#AAAAAA",
   textTertiary: "#10021b",
   primary: "#221e2d",
   border: "#333333",
-  danger: "#e40a40",  
-  success: "#13ef17", 
-  warning: "#ff890a",  
+  danger: "#e40a40",
+  success: "#13ef17",
+  warning: "#ff890a",
   overlay: "#ecebed",
-  clean: "#FFFFFF", 
-  barIcon: "#ffffff", 
+  clean: "#FFFFFF",
+  barIcon: "#ffffff",
 };
 
 export type Theme = typeof lightColors;

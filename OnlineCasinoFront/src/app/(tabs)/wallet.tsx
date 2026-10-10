@@ -7,8 +7,18 @@ import { Button } from "../../../src/components/ui/Button";
 import { Input } from "../../../src/components/ui/Input";
 import { Modal } from "../../../src/components/ui/Modal";
 
-import { useDeposit, useTransactions, useWallet, useWithdraw } from "../../../src/hooks/useWallet";
+import {
+  useDeposit,
+  useTransactions,
+  useWallet,
+  useWithdraw,
+} from "../../../src/hooks/useWallet";
 
+/**
+ * Wallet screen with balance, deposit/withdraw actions, and transaction list.
+ *
+ * @returns The rendered wallet screen.
+ */
 export default function WalletScreen() {
   const theme = useTheme();
 
@@ -35,52 +45,70 @@ export default function WalletScreen() {
       onSuccess: () => {
         setModal(null);
         setAmount("");
-        setSuccessMessage(modal === "deposit" ? "Deposit successful" : "Withdrawal successful");
+        setSuccessMessage(
+          modal === "deposit" ? "Deposit successful" : "Withdrawal successful",
+        );
       },
-      onError: (err: any) => setErrorMessage(err.message || "Something went wrong"),
+      onError: (err: any) =>
+        setErrorMessage(err.message || "Something went wrong"),
     });
   };
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: theme.background }]} edges={["top"]}>
-      <View style={[styles.balanceCard, { backgroundColor: theme.card, borderColor: theme.border }]}>
-       
+    <SafeAreaView
+      style={[styles.container, { backgroundColor: theme.background }]}
+      edges={["top"]}
+    >
+      <View
+        style={[
+          styles.balanceCard,
+          { backgroundColor: theme.card, borderColor: theme.border },
+        ]}
+      >
         <Text style={[styles.balance, { color: theme.text }]}>
           {wallet?.balance.toFixed(2) ?? "0.00"} {wallet?.currency ?? "EUR"}
         </Text>
         <View style={styles.actions}>
-            <View>
-                <Button                 
-                  style={{ 
-                    borderColor: theme.warning,
-                    borderWidth: 2,
-                    paddingHorizontal: 16, 
-                    alignSelf: "flex-start",
-                  }}
-                  textStyle={{
-                    color: theme.warning,
-                    fontSize: 14,
-                    fontWeight: "600",
-                  }} title="Deposit" onPress={() => setModal("deposit")} />
-            </View>
-            <View>
-                <Button                 
-                  style={{ 
-                    borderColor: theme.danger,
-                    borderWidth: 2,
-                    paddingHorizontal: 16, 
-                    alignSelf: "flex-start",
-                  }}
-                  textStyle={{
-                    color: theme.danger,
-                    fontSize: 14,
-                    fontWeight: "600",
-                  }} title="Withdrawal" onPress={() => setModal("withdraw")} />
-            </View>
+          <View>
+            <Button
+              style={{
+                borderColor: theme.warning,
+                borderWidth: 2,
+                paddingHorizontal: 16,
+                alignSelf: "flex-start",
+              }}
+              textStyle={{
+                color: theme.warning,
+                fontSize: 14,
+                fontWeight: "600",
+              }}
+              title="Deposit"
+              onPress={() => setModal("deposit")}
+            />
+          </View>
+          <View>
+            <Button
+              style={{
+                borderColor: theme.danger,
+                borderWidth: 2,
+                paddingHorizontal: 16,
+                alignSelf: "flex-start",
+              }}
+              textStyle={{
+                color: theme.danger,
+                fontSize: 14,
+                fontWeight: "600",
+              }}
+              title="Withdrawal"
+              onPress={() => setModal("withdraw")}
+            />
+          </View>
         </View>
       </View>
 
-      <Text style={[styles.sectionTitle, { color: theme.text }]}>Transactions</Text>
+      <Text style={[styles.sectionTitle, { color: theme.text }]}>
+        Transactions
+      </Text>
 
       <FlatList
         data={tx?.items ?? []}
@@ -96,9 +124,16 @@ export default function WalletScreen() {
           />
         }
         renderItem={({ item }) => (
-          <View style={[styles.txItem, { backgroundColor: theme.card, borderColor: theme.border }]}>
+          <View
+            style={[
+              styles.txItem,
+              { backgroundColor: theme.card, borderColor: theme.border },
+            ]}
+          >
             <View>
-              <Text style={[styles.txType, { color: theme.text }]}>{item.type}</Text>
+              <Text style={[styles.txType, { color: theme.text }]}>
+                {item.type}
+              </Text>
               <Text style={[styles.txDate, { color: theme.textSecondary }]}>
                 {new Date(item.createdAt).toLocaleString()}
               </Text>
@@ -115,82 +150,105 @@ export default function WalletScreen() {
           </View>
         )}
         ListEmptyComponent={
-          <Text style={[styles.empty, { color: theme.textSecondary }]}>No transactions</Text>
+          <Text style={[styles.empty, { color: theme.textSecondary }]}>
+            No transactions
+          </Text>
         }
       />
- 
-        <Modal 
-          variant={modal === "deposit" ? "warning" : "danger"}  
-          backdropColor="rgba(12, 1, 21, 0.85)"   
-          background={theme.card} 
-          visible={modal !== null} 
-          onClose={() => setModal(null)} 
-          title={modal === "deposit" ? "Deposit" : "Withdrawal"}
-        >
-            <Input  
-              borderColor={theme.text} 
-              label="Amount" 
-              labelColor={theme.text}        
-              value={amount} 
-              onChangeText={setAmount} 
-              keyboardType="decimal-pad" 
-              placeholder="10.00" 
-            />
-            <Button
-                title="ОК"
-                onPress={handleAction}
-                loading={deposit.isPending || withdraw.isPending}
-                style={{ 
-                  borderColor: theme.text,
-                  borderWidth: 2,
-                  paddingHorizontal: 23,
-                  paddingVertical: 12,
-                  alignSelf: "flex-start",
-                }}
-                textStyle={{
-                  color: theme.text,
-                  fontSize: 16,
-                  fontWeight: "900",
-                }}
-            />
-        </Modal>
 
-        <Modal
-          visible={!!successMessage}
-          onClose={() => setSuccessMessage(null)}
-          title="Success"
-          variant="success"
-        >
-          <Text style={{ color: theme.textTertiary, fontSize: 15, marginBottom: 20, lineHeight: 22 }}>
-            {successMessage}
-          </Text>
-          <Button title="OK" onPress={() => setSuccessMessage(null)} />
-        </Modal>
+      <Modal
+        variant={modal === "deposit" ? "warning" : "danger"}
+        backdropColor="rgba(12, 1, 21, 0.85)"
+        background={theme.card}
+        visible={modal !== null}
+        onClose={() => setModal(null)}
+        title={modal === "deposit" ? "Deposit" : "Withdrawal"}
+      >
+        <Input
+          borderColor={theme.text}
+          label="Amount"
+          labelColor={theme.text}
+          value={amount}
+          onChangeText={setAmount}
+          keyboardType="decimal-pad"
+          placeholder="10.00"
+        />
+        <Button
+          title="ОК"
+          onPress={handleAction}
+          loading={deposit.isPending || withdraw.isPending}
+          style={{
+            borderColor: theme.text,
+            borderWidth: 2,
+            paddingHorizontal: 23,
+            paddingVertical: 12,
+            alignSelf: "flex-start",
+          }}
+          textStyle={{
+            color: theme.text,
+            fontSize: 16,
+            fontWeight: "900",
+          }}
+        />
+      </Modal>
 
-        <Modal
-          visible={!!errorMessage}
-          onClose={() => setErrorMessage(null)}
-          title="Error"
-          variant="danger"
+      <Modal
+        visible={!!successMessage}
+        onClose={() => setSuccessMessage(null)}
+        title="Success"
+        variant="success"
+      >
+        <Text
+          style={{
+            color: theme.textTertiary,
+            fontSize: 15,
+            marginBottom: 20,
+            lineHeight: 22,
+          }}
         >
-          <Text style={{ color: theme.danger, fontSize: 15, marginBottom: 20, lineHeight: 22 }}>
-            {errorMessage}
-          </Text>
-          <Button title="OK" onPress={() => setErrorMessage(null)} />
-        </Modal>
+          {successMessage}
+        </Text>
+        <Button title="OK" onPress={() => setSuccessMessage(null)} />
+      </Modal>
+
+      <Modal
+        visible={!!errorMessage}
+        onClose={() => setErrorMessage(null)}
+        title="Error"
+        variant="danger"
+      >
+        <Text
+          style={{
+            color: theme.danger,
+            fontSize: 15,
+            marginBottom: 20,
+            lineHeight: 22,
+          }}
+        >
+          {errorMessage}
+        </Text>
+        <Button title="OK" onPress={() => setErrorMessage(null)} />
+      </Modal>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 16 },
-  balanceCard: { borderRadius: 16, padding: 20, borderWidth: 1, marginBottom: 24 },
+  balanceCard: {
+    borderRadius: 16,
+    padding: 20,
+    borderWidth: 1,
+    marginBottom: 24,
+  },
   balanceLabel: { fontSize: 14, marginBottom: 8 },
   balance: { fontSize: 21, fontWeight: "900", marginBottom: 16 },
-  actions: { flexDirection: "row",  
-  gap: 21,             
-  alignItems: "center",
-  justifyContent: "center"},   
+  actions: {
+    flexDirection: "row",
+    gap: 21,
+    alignItems: "center",
+    justifyContent: "center",
+  },
   sectionTitle: { fontSize: 20, fontWeight: "800", marginBottom: 12 },
   txItem: {
     flexDirection: "row",

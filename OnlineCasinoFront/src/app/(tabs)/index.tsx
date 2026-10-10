@@ -1,4 +1,11 @@
-import { ActivityIndicator, ImageBackground, ScrollView, StyleSheet, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  ImageBackground,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import { useRouter } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -8,10 +15,15 @@ import { GAMES } from "../../../src//utils/constants";
 
 import { useWallet } from "../../../src/hooks/useWallet";
 
+/**
+ * Home screen with the game catalog and wallet balance.
+ *
+ * @returns The rendered home screen.
+ */
 export default function HomeScreen() {
   const theme = useTheme();
   const router = useRouter();
-  
+
   const { data: wallet, isLoading } = useWallet();
 
   return (
@@ -24,12 +36,18 @@ export default function HomeScreen() {
 
       <SafeAreaView style={styles.container} edges={["top"]}>
         <ScrollView contentContainerStyle={styles.scroll}>
-          <View style={[ styles.balanceCard, { backgroundColor: theme.card, borderColor: theme.border }, ]} >
+          <View
+            style={[
+              styles.balanceCard,
+              { backgroundColor: theme.card, borderColor: theme.border },
+            ]}
+          >
             {isLoading ? (
               <ActivityIndicator color={theme.primary} />
             ) : (
               <Text style={[styles.balance, { color: theme.text }]}>
-                {wallet?.balance.toFixed(2) ?? "0.00"} {wallet?.currency ?? "EUR"}
+                {wallet?.balance.toFixed(2) ?? "0.00"}{" "}
+                {wallet?.currency ?? "EUR"}
               </Text>
             )}
           </View>
@@ -41,7 +59,7 @@ export default function HomeScreen() {
                 code={g.code}
                 name={g.name}
                 image={g.image}
-                onPress={() => router.push(g.route as any)}
+                onPress={() => router.push(g.route)}
               />
             ))}
           </View>
@@ -58,7 +76,7 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     right: 0,
-    bottom: 0,   
+    bottom: 0,
   },
   container: { flex: 1 },
   scroll: { padding: 16, paddingBottom: 100 },

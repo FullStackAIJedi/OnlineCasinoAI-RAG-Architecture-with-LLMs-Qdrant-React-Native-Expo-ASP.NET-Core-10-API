@@ -20,17 +20,34 @@ const ThemeContext = createContext<ThemeContextValue>({
 
 const STORAGE_KEY = "theme_mode";
 
+/**
+ * Returns the current theme object.
+ *
+ * @returns The active theme (colors, spacing, etc.).
+ */
 export const useTheme = () => useContext(ThemeContext).theme;
 
+/**
+ * Returns the current theme mode and a setter.
+ *
+ * @returns An object with `mode` ("light" | "dark") and `setMode`.
+ */
 export const useThemeMode = () => {
   const { mode, setMode } = useContext(ThemeContext);
   return { mode, setMode };
 };
 
+/**
+ * Provides the current theme and theme mode to the app.
+ *
+ * @param props - Component props.
+ * @param props.children - The subtree that consumes the theme.
+ * @returns The rendered theme provider.
+ */
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const systemScheme = useColorScheme();
   const [mode, setModeState] = useState<ThemeMode>(
-    systemScheme === "dark" ? "dark" : "light"
+    systemScheme === "dark" ? "dark" : "light",
   );
 
   useEffect(() => {
@@ -40,8 +57,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
         if (saved === "light" || saved === "dark") {
           setModeState(saved);
         }
-      } catch { 
-      }
+      } catch {}
     })();
   }, []);
 
@@ -49,8 +65,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     setModeState(newMode);
     try {
       await SecureStore.setItemAsync(STORAGE_KEY, newMode);
-    } catch { 
-    }
+    } catch {}
   };
 
   const theme = mode === "dark" ? darkColors : lightColors;

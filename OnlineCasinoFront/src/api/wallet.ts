@@ -11,7 +11,6 @@ import type { PagedResult, Transaction, Wallet } from "./types";
  * endpoints (slots, roulette, blackjack) — they are not handled here.
  */
 export const walletApi = {
-
   /**
    * Fetches the current user's wallet (balance and currency).
    *
@@ -31,7 +30,7 @@ export const walletApi = {
    */
   getTransactions: (page = 1, pageSize = 20) =>
     apiFetch<PagedResult<Transaction>>(
-      `/api/wallet/transactions?page=${page}&pageSize=${pageSize}`
+      `/api/wallet/transactions?page=${page}&pageSize=${pageSize}`,
     ),
 
   /**
@@ -41,7 +40,10 @@ export const walletApi = {
    * @returns The updated wallet after the deposit.
    */
   deposit: (amount: number) =>
-    apiFetch<Wallet>("/api/wallet/deposit", { method: "POST", body: { amount } }),
+    apiFetch<Wallet>("/api/wallet/deposit", {
+      method: "POST",
+      body: { amount },
+    }),
 
   /**
    * Withdraws funds from the user's wallet.
@@ -51,5 +53,8 @@ export const walletApi = {
    * @throws {ApiError} If the balance is insufficient (typically 400).
    */
   withdraw: (amount: number) =>
-    apiFetch<Wallet>("/api/wallet/withdraw", { method: "POST", body: { amount } }),
+    apiFetch<Wallet>("/api/wallet/withdraw", {
+      method: "POST",
+      body: { amount },
+    }),
 };

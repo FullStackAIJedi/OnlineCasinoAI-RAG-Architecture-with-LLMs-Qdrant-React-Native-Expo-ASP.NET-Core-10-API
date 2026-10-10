@@ -1,5 +1,11 @@
 import { useState } from "react";
-import { Platform, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  Platform,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Ionicons } from "@expo/vector-icons";
 import { useTheme } from "../../theme/ThemeProvider";
@@ -16,9 +22,14 @@ export const DatePicker = ({ label, value, onChange }: Props) => {
 
   return (
     <View style={styles.container}>
-      <Text style={[styles.label, { color: theme.textSecondary }]}>{label}</Text>
+      <Text style={[styles.label, { color: theme.textSecondary }]}>
+        {label}
+      </Text>
       <TouchableOpacity
-        style={[styles.trigger, { backgroundColor: theme.card, borderColor: theme.border }]}
+        style={[
+          styles.trigger,
+          { backgroundColor: theme.card, borderColor: theme.border },
+        ]}
         onPress={() => setShow(true)}
       >
         <Text style={{ color: theme.text }}>{value.toLocaleDateString()}</Text>

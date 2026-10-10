@@ -381,7 +381,6 @@ namespace OnlineCasino.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("PofileImage")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int>("RoleId")

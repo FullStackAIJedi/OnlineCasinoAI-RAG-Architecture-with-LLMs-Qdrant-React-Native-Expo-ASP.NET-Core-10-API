@@ -54,8 +54,11 @@ export function useRouletteScreen() {
   const [errors, setErrors] = useState<FormErrors>({});
   const [spinning, setSpinning] = useState(false);
   const [winningNumber, setWinningNumber] = useState<number | null>(null);
-  const [pendingResult, setPendingResult] = useState<RouletteSpinResponse | null>(null);
-  const [optimisticBalance, setOptimisticBalance] = useState<number | null>(null);
+  const [pendingResult, setPendingResult] =
+    useState<RouletteSpinResponse | null>(null);
+  const [optimisticBalance, setOptimisticBalance] = useState<number | null>(
+    null,
+  );
   const [resultText, setResultText] = useState<string | null>(null);
   const [resultColor, setResultColor] = useState<string>("");
 
@@ -77,7 +80,7 @@ export function useRouletteScreen() {
       setOptimisticBalance(null);
       refetchWallet();
       refetchBets();
-    }, [refetchWallet, refetchBets])
+    }, [refetchWallet, refetchBets]),
   );
 
   useEffect(() => {
@@ -126,7 +129,9 @@ export function useRouletteScreen() {
     const body: PlaceBetRequest = {
       type: betType,
       amount: betAmount,
-      ...(betType === "number" && { value: parseRouletteNumber(value) ?? undefined }),
+      ...(betType === "number" && {
+        value: parseRouletteNumber(value) ?? undefined,
+      }),
       ...(betType === "dozen" && { value: parseInt(value, 10) }),
     };
 
@@ -170,7 +175,7 @@ export function useRouletteScreen() {
           setResultColor("red");
           setResultText(err.message);
         },
-      }
+      },
     );
   };
 

@@ -7,12 +7,19 @@ import { Dropdown } from "../../../src/components/ui/Dropdown";
 import { GAME_OPTIONS } from "../../../src//utils/constants";
 
 import { useHistory } from "../../../src/hooks/useHistory";
- 
+
+/**
+ * Game history screen with a filterable list of past rounds.
+ *
+ * @returns The rendered history screen.
+ */
 export default function HistoryScreen() {
   const theme = useTheme();
-  
+
   const [game, setGame] = useState("");
-  const { data, refetch, isRefetching, isLoading } = useHistory(game || undefined);
+  const { data, refetch, isRefetching, isLoading } = useHistory(
+    game || undefined,
+  );
 
   return (
     <SafeAreaView
@@ -58,8 +65,8 @@ export default function HistoryScreen() {
                       item.result === "Win"
                         ? theme.success
                         : item.result === "Push"
-                        ? theme.warning
-                        : theme.danger,
+                          ? theme.warning
+                          : theme.danger,
                   },
                 ]}
               >
@@ -78,16 +85,16 @@ export default function HistoryScreen() {
                       item.result === "Win"
                         ? theme.success
                         : item.result === "Push"
-                        ? theme.warning
-                        : theme.danger,
+                          ? theme.warning
+                          : theme.danger,
                   },
                 ]}
               >
                 {item.result === "Win"
                   ? `Win: ${item.winAmount.toFixed(2)}`
                   : item.result === "Push"
-                  ? `Push: ${item.betAmount.toFixed(2)}`
-                  : `Lose: ${item.betAmount.toFixed(2)}`}
+                    ? `Push: ${item.betAmount.toFixed(2)}`
+                    : `Lose: ${item.betAmount.toFixed(2)}`}
               </Text>
             </View>
             <Text style={[styles.date, { color: theme.textSecondary }]}>

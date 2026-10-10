@@ -1,15 +1,15 @@
 /**
  * Standard error envelope returned by the backend for non-2xx responses.
- * 
+ *
  * (ASP.NET Core, custom) populate different fields.
  * `apiFetch` normalizes all of them into a single message.
  */
 export interface ErrorResponse {
   /** HTTP status code (some backends use `statusCode`). */
   statusCode?: number;
- /** HTTP status code (alternative field name). */
+  /** HTTP status code (alternative field name). */
   status?: number;
- /** Human-readable error message. */
+  /** Human-readable error message. */
   message?: string;
   /** Short error title (from ASP.NET ProblemDetails). */
   title?: string;
@@ -51,9 +51,9 @@ export interface AuthUser {
 /** Full profile of the current user. */
 export interface UserProfile {
   id: number;
-  email: string; 
+  email: string;
   /** URL or key of the profile image. */
-  pofileImage: string; 
+  pofileImage: string;
   nickName: string;
   firstName?: string;
   lastName?: string;
@@ -183,7 +183,7 @@ export interface RouletteSpinResponse {
   roundId: string;
   /** The winning number (0–36). */
   winningNumber: number;
-   /** The winning color (`"red"`, `"black"`, or `"green"` for 0). */
+  /** The winning color (`"red"`, `"black"`, or `"green"` for 0). */
   winningColor: string;
   /** Total amount bet across all bets in the round. */
   totalBet: number;
@@ -195,8 +195,6 @@ export interface RouletteSpinResponse {
   result: string;
 }
 
-
-
 // Blackjack
 
 /** Payload for starting a new Blackjack session. */
@@ -206,7 +204,7 @@ export interface StartBlackjackRequest {
 
 /** Current state of a Blackjack session. */
 export interface BlackjackState {
-  sessionId: string; 
+  sessionId: string;
   /** Cards in the player's hand (e.g. `["AS", "10H"]`). */
   playerHand: string[];
   /** Cards in the dealer's hand. The second card may be hidden while in progress. */

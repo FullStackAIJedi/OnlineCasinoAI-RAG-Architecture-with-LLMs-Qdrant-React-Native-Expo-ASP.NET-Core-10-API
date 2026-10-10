@@ -1,12 +1,20 @@
-import { Tabs, useRouter } from "expo-router";
+import { Tabs } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { useTheme } from "../../../src/theme/ThemeProvider";
 
+/**
+ * Tabs group layout.
+ *
+ * Access control is handled by `Stack.Protected` in the root layout,
+ * so no additional guard is needed here.
+ *
+ * @returns The rendered tabs layout.
+ */
 export default function TabsLayout() {
-const theme = useTheme();
-const insets = useSafeAreaInsets();
+  const theme = useTheme();
+  const insets = useSafeAreaInsets();
 
   return (
     <Tabs
@@ -19,8 +27,8 @@ const insets = useSafeAreaInsets();
           left: 0,
           right: 0,
           bottom: 0,
-          height: 64 + insets.bottom,   
-          backgroundColor: "rgba(12, 1, 21, 0.85)",  
+          height: 64 + insets.bottom,
+          backgroundColor: "rgba(12, 1, 21, 0.85)",
           borderTopWidth: 0,
           elevation: 0,
           shadowOpacity: 0,
@@ -34,31 +42,39 @@ const insets = useSafeAreaInsets();
       <Tabs.Screen
         name="index"
         options={{
-            title: "Games",
-            tabBarIcon: ({ color, size }) => <Ionicons name="game-controller" color={color} size={size} />,
+          title: "Games",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="game-controller" color={color} size={size} />
+          ),
         }}
-        />
-        <Tabs.Screen
+      />
+      <Tabs.Screen
         name="wallet"
         options={{
-            title: "Wallet",
-            tabBarIcon: ({ color, size }) => <Ionicons name="wallet" color={color} size={size} />,
+          title: "Wallet",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="wallet" color={color} size={size} />
+          ),
         }}
-        />
-        <Tabs.Screen
+      />
+      <Tabs.Screen
         name="history"
         options={{
-            title: "History",
-            tabBarIcon: ({ color, size }) => <Ionicons name="time" color={color} size={size} />,
+          title: "History",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="time" color={color} size={size} />
+          ),
         }}
-        />
-        <Tabs.Screen
+      />
+      <Tabs.Screen
         name="profile"
         options={{
-            title: "Profile",
-            tabBarIcon: ({ color, size }) => <Ionicons name="person" color={color} size={size} />,
+          title: "Profile",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="person" color={color} size={size} />
+          ),
         }}
-        />
+      />
     </Tabs>
   );
 }
