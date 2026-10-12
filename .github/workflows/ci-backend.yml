@@ -11,6 +11,7 @@ on:
     paths:
       - 'OnlineCasino/**'
       - '.github/workflows/ci-backend.yml'
+  workflow_dispatch:
 
 jobs:
   build-and-test:
@@ -31,13 +32,13 @@ jobs:
           dotnet-version: '10.0.x'
 
       - name: Restore
-        run: dotnet restore OnlineCasino.sln
+        run: dotnet restore OnlineCasino.slnx
 
       - name: Build
-        run: dotnet build OnlineCasino.sln --no-restore --configuration Release
+        run: dotnet build OnlineCasino.slnx --no-restore --configuration Release
 
       - name: Test
-        run: dotnet test OnlineCasino.sln --no-build --configuration Release --logger "trx;LogFileName=test-results.trx" --logger "console;verbosity=normal"
+        run: dotnet test OnlineCasino.slnx --no-build --configuration Release --logger "trx;LogFileName=test-results.trx" --logger "console;verbosity=normal"
 
       - name: Upload test results
         if: always()
