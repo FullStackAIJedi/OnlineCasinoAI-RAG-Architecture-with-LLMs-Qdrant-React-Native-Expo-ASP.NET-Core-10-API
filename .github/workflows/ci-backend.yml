@@ -1,0 +1,47 @@
+name: Backend CI
+
+on:
+  push:
+    branches: [main, master, develop]
+    paths:
+      - 'OnlineCasino/**'
+      - '.github/workflows/ci-backend.yml'
+  pull_request:
+    branches: [main, master, develop]
+    paths:
+      - 'OnlineCasino/**'
+      - '.github/workflows/ci-backend.yml'
+
+jobs:
+  build-and-test:
+    name: Build & Test .NET API
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: OnlineCasino
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 10
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Restore
+        run: dotnet restore OnlineCasino.sln
+
+      - name: Build
+        run: dotnet build OnlineCasino.sln --no-restore --configuration Release
+
+      - name: Test
+        run: dotnet test OnlineCasino.sln --no-build --configuration Release --logger "trx;LogFileName=test-results.trx" --logger "console;verbosity=normal"
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-test-results
+          path: OnlineCasino/**/TestResults/*.trx
