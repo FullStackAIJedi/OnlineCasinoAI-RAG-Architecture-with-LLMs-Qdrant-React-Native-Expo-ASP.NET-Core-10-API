@@ -3,8 +3,7 @@
 using Xunit;
 using FluentAssertions;
 
-using OnlineCasino.Services;
-
+using OnlineCasino.Services; 
 using OnlineCasino.Tests.Common.Fixtures;
 using OnlineCasino.Tests.Common.TestData;
  
