@@ -47,4 +47,34 @@ describe("Input", () => {
     );
     expect(getByPlaceholderText("Pwd").props.secureTextEntry).toBe(true);
   });
+
+  it("renders placeholder", async () => {
+    const { getByPlaceholderText } = await render(
+      <Input value="" onChangeText={jest.fn()} placeholder="Enter name" />,
+    );
+    expect(getByPlaceholderText("Enter name")).toBeTruthy();
+  });
+
+  it("renders error message when error prop provided", async () => {
+    const { getByText } = await render(
+      <Input value="" onChangeText={jest.fn()} error="Required field" />,
+    );
+    expect(getByText("Required field")).toBeTruthy();
+  });
+
+  it("does not render error when no error prop", async () => {
+    const { queryByText } = await render(
+      <Input value="" onChangeText={jest.fn()} />,
+    );
+    expect(queryByText("Required field")).toBeNull();
+  });
+
+  it("calls onChangeText with typed value", async () => {
+    const onChangeText = jest.fn();
+    const { getByDisplayValue } = await render(
+      <Input value="old" onChangeText={onChangeText} />,
+    );
+    fireEvent.changeText(getByDisplayValue("old"), "new");
+    expect(onChangeText).toHaveBeenCalledWith("new");
+  });
 });

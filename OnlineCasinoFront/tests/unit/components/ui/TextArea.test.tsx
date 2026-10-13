@@ -40,4 +40,27 @@ describe("TextArea", () => {
     );
     expect(getByText("Too short")).toBeTruthy();
   });
+
+  it("renders label text", async () => {
+    const { getByText } = await render(
+      <TextArea label="Notes" value="" onChangeText={jest.fn()} />,
+    );
+    expect(getByText("Notes")).toBeTruthy();
+  });
+
+  it("calls onChangeText with typed value", async () => {
+    const onChangeText = jest.fn();
+    const { getByDisplayValue } = await render(
+      <TextArea value="old" onChangeText={onChangeText} />,
+    );
+    fireEvent.changeText(getByDisplayValue("old"), "new");
+    expect(onChangeText).toHaveBeenCalledWith("new");
+  });
+
+  it("renders error message", async () => {
+    const { getByText } = await render(
+      <TextArea value="" onChangeText={jest.fn()} error="Too long" />,
+    );
+    expect(getByText("Too long")).toBeTruthy();
+  });
 });
