@@ -16,6 +16,7 @@ jobs:
   lint-and-typecheck:
     name: Lint & Typecheck React Native
     runs-on: ubuntu-latest
+    timeout-minutes: 15
 
     defaults:
       run:
@@ -42,4 +43,6 @@ jobs:
         run: npx tsc --noEmit
 
       - name: Test
-        run: npm test --if-present -- --watchAll=false
+        run: npx jest --ci --forceExit
+        env:
+          CI: true
