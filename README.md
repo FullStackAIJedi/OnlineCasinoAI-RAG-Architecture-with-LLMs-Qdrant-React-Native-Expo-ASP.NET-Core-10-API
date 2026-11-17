@@ -1,11 +1,12 @@
 # OnlineCasino
 
-[![Mobile CI](https://github.com/SekulKamberov2/OnlineCasino-React-Native-Expo-ASP.NET-Core-10-API-EntityFrameworkCore/actions/workflows/ci-mobile.yml/badge.svg)](https://github.com/SekulKamberov2/OnlineCasino-React-Native-Expo-ASP.NET-Core-10-API-EntityFrameworkCore/actions/workflows/ci-mobile.yml)
+[![Mobile CI](https://github.com/SekulKamberov2/OnlineCasino-React-Native-Expo-ASP.NET-Core-10-API-EntityFrameworkCore/actions/workflows/ci-mobile.yml/badge.svg)]
+(https://github.com/SekulKamberov2/OnlineCasino-React-Native-Expo-ASP.NET-Core-10-API-EntityFrameworkCore/actions/workflows/ci-mobile.yml)
 ![Frontend Tests](https://img.shields.io/badge/frontend%20tests-450%20passed-brightgreen)
 ![Backend Tests](https://img.shields.io/badge/backend%20tests-403%20passed-brightgreen)
 ![Total Tests](https://img.shields.io/badge/total%20tests-853%20passed-success)
 ![React Native](https://img.shields.io/badge/React%20Native-0.86.3-61dafb)
-![Expo](https://img.shields.io/badge/Expo-57.0.25-000020)
+![Expo](https://img.shields.io/badge/Expo-58.0.25-000020)
 ![TypeScript](https://img.shields.io/badge/TypeScript-6.0-3178c6)
 ![.NET](https://img.shields.io/badge/.NET-10-512bd4)
 ![EF Core](https://img.shields.io/badge/EF%20Core-10-512bd4)
@@ -48,18 +49,8 @@
 
 <p align="center">
   <img src="OnlineCasinoFront/assets/screens/21.png" width="150" height="267" style="border: 2px solid #010408; border-radius: 10px; margin: 6px;" />
- <img
-    src="https://raw.githubusercontent.com/FullStackAIJedi/OnlineCasinoAI-RAG-Architecture-with-LLMs-Qdrant-React-Native-Expo-ASP.NET-Core-10-API/main/OnlineCasinoFront/assets/screens/22.webp"
-    width="150"
-    height="267"
-    style="border: 2px solid #010408; border-radius: 10px; margin: 6px;"
-  />
-  <img
-    src="https://raw.githubusercontent.com/FullStackAIJedi/OnlineCasinoAI-RAG-Architecture-with-LLMs-Qdrant-React-Native-Expo-ASP.NET-Core-10-API/main/OnlineCasinoFront/assets/screens/23.webp"
-    width="150"
-    height="267"
-    style="border: 2px solid #010408; border-radius: 10px; margin: 6px;"
-  />
+  <img src="OnlineCasinoFront/assets/screens/22.webp" width="150" height="267" style="border: 2px solid #010408; border-radius: 10px; margin: 6px;" />
+  <img src="OnlineCasinoFront/assets/screens/23.webp" width="150" height="267" style="border: 2px solid #010408; border-radius: 10px; margin: 6px;" />
 </p>
 
 A full-stack casino gaming application built with React Native, Expo and TypeScript on the frontend, and ASP.NET Core 10 with Entity Framework Core and SQLite on the backend.
@@ -96,7 +87,7 @@ Built with **Microsoft.Extensions.AI** and **Microsoft.Extensions.VectorData**, 
 | Layer                    | Technology                                     |
 | ------------------------ | ---------------------------------------------- |
 | Mobile framework         | React Native 0.86.3                            |
-| Runtime                  | Expo SDK 57.0.25                               |
+| Runtime                  | Expo SDK 58.0.25                               |
 | Language (frontend)      | TypeScript 6.0 (strict)                        |
 | Routing                  | Expo Router 57.0.23 (file-based, typed routes) |
 | State / data             | TanStack Query v5.104                          |
@@ -123,7 +114,7 @@ Built with **Microsoft.Extensions.AI** and **Microsoft.Extensions.VectorData**, 
 
 ## Mobile App
 
-The mobile app is built with **React Native 0.86.3** and **Expo SDK 57.0.25**. It is a single codebase that runs on iOS, Android and the web through Expo's unified runtime.
+The mobile app is built with **React Native 0.86.3** and **Expo SDK 58.0.25**. It is a single codebase that runs on iOS, Android and the web through Expo's unified runtime.
 
 ## Backend
 
