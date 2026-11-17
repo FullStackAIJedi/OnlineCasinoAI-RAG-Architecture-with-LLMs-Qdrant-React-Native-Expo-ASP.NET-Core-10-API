@@ -1,168 +1,3 @@
-// import { useEffect, useRef, useState } from "react";
-// import { Animated, Easing, LayoutChangeEvent, StyleSheet, Text, View } from "react-native";
-
-// import { WHEEL_ORDER, IMAGE_ROTATION, ANGLE_OFFSET, BALL_ANGLE_OFFSET } from "../../../src/utils/constants";
-
-// const WHEEL = require("../../../assets/roulette/wheel.png");
-// const SLOT_ANGLE = 360 / WHEEL_ORDER.length;  // 360 / 38 = 9.47°
-
-// const getNumberAngle = (num: number): number => {
-//   const idx = WHEEL_ORDER.indexOf(num);
-//   if (idx === -1) return 0;
-//   return idx * SLOT_ANGLE + ANGLE_OFFSET;
-// };
-
-// interface Props {
-//   winningNumber: number | null;
-//   spinning: boolean;
-//   onStop?: () => void;
-// }
-
-// export const RouletteWheel = ({ winningNumber, spinning, onStop }: Props) => {
-//   const [parentSize, setParentSize] = useState(0);
-
-//   const wheelRotation = useRef(new Animated.Value(0)).current;
-//   const ballRotation = useRef(new Animated.Value(0)).current;
-
-//   const size = parentSize * 0.95; 
-//   const ballOrbitRadius = size * 0.36;
-//   const ballSize = size * 0.025;  
-
-//   useEffect(() => {
-//     if (!spinning || winningNumber === null) return;
-
-//     const targetNumber = winningNumber === 37 ? 999 : winningNumber;
-//     const targetWheelAngle = (360 - getNumberAngle(targetNumber)) % 360;
-//     const wheelFullSpins = 6 + Math.floor(Math.random() * 3);
-//     const wheelTotal = wheelFullSpins * 360 + targetWheelAngle;
-
-//     const ballJitter = (Math.random() - 0.5) * 1;
-//     const ballFullSpins = 10 + Math.floor(Math.random() * 4);
-//     const ballTotal = -(ballFullSpins * 360) + ballJitter + BALL_ANGLE_OFFSET;
-
-//     Animated.parallel([
-//       Animated.timing(wheelRotation, {
-//         toValue: wheelTotal,
-//         duration: 4500,
-//         easing: Easing.out(Easing.cubic),
-//         useNativeDriver: true,
-//       }),
-//       Animated.timing(ballRotation, {
-//         toValue: ballTotal,
-//         duration: 4500,
-//         easing: Easing.out(Easing.cubic),
-//         useNativeDriver: true,
-//       }),
-//     ]).start(() => {
-//       wheelRotation.setValue(wheelTotal % 360);
-//       ballRotation.setValue(ballTotal % 360);
-//       onStop?.();
-//     });
-//   }, [spinning, winningNumber]);
-
-//   const wheelRotate = wheelRotation.interpolate({
-//     inputRange: [-360, 360],
-//     outputRange: ["-360deg", "360deg"],
-//   });
-
-//   const ballAngle = ballRotation.interpolate({
-//     inputRange: [-360, 360],
-//     outputRange: ["-360deg", "360deg"],
-//   });
-
-//   const handleLayout = (e: LayoutChangeEvent) => {
-//     const { width } = e.nativeEvent.layout;
-//     setParentSize(width);
-//   };
-
-//   return (
-//     <View style={styles.container} onLayout={handleLayout}>
-//       {size > 0 && (
-//         <View
-//           style={{
-//             width: size,
-//             height: size,
-//             alignItems: "center",
-//             justifyContent: "center",
-//             alignSelf: "center",
-//           }}
-//         >
-//           <Animated.Image
-//             source={WHEEL}
-//             style={{
-//               width: size,
-//               height: size,
-//               transform: [
-//                 { rotate: wheelRotate },
-//                 { rotate: IMAGE_ROTATION },
-//               ],
-//             }}
-//             resizeMode="contain"
-//           />
-//           <Animated.View
-//             style={[
-//               styles.ballOrbit,
-//               {
-//                 width: ballOrbitRadius * 2,
-//                 height: ballOrbitRadius * 2,
-//                 transform: [{ rotate: ballAngle }],
-//               },
-//             ]}
-//             pointerEvents="none"
-//           >
-//             <View
-//               style={[
-//                 styles.ball,
-//                 {
-//                   width: ballSize,
-//                   height: ballSize,
-//                   borderRadius: ballSize / 2,
-//                   top: -ballSize / 2,
-//                   left: ballOrbitRadius - ballSize / 2,
-//                 },
-//               ]}
-//             />
-//           </Animated.View>
-
-//           <View style={[styles.pointer, { top: -size * 0.10 }]}>
-//             <Text style={{ fontSize: size * 0.08, color: "#E63946" }}>▼</Text>
-//           </View>
-//         </View>
-//       )}
-//     </View>
-//   );
-// };
-
-// const styles = StyleSheet.create({
-//   container: {
-//     width: "100%",
-//     alignItems: "center",
-//     justifyContent: "center",
-//     alignSelf: "center",
-//   },
-//   ballOrbit: {
-//     position: "absolute",
-//     alignItems: "center",
-//     justifyContent: "center",
-//   },
-//   ball: {
-//     position: "absolute",
-//     backgroundColor: "#FFFFFF",
-//     borderWidth: 1,
-//     borderColor: "#CCCCCC",
-//     shadowColor: "#000",
-//     shadowOffset: { width: 0, height: 2 },
-//     shadowOpacity: 0.4,
-//     shadowRadius: 3,
-//     elevation: 5,
-//   },
-//   pointer: {
-//     position: "absolute",
-//     zIndex: 10,
-//     alignSelf: "center",
-//   },
-// });
-
 import { useEffect, useRef, useState } from "react";
 import {
   Animated,
@@ -187,9 +22,44 @@ const ZERO_ZERO_API = 37;
  * intentionally non-sequential. `ZERO_ZERO_SENTINEL` marks the "00" pocket.
  */
 const WHEEL_ORDER = [
-  0, 2, 14, 35, 23, 4, 16, 33, 21, 6, 18, 31, 19, 8, 12, 29, 25, 10, 27,
+  0,
+  2,
+  14,
+  35,
+  23,
+  4,
+  16,
+  33,
+  21,
+  6,
+  18,
+  31,
+  19,
+  8,
+  12,
+  29,
+  25,
+  10,
+  27,
   ZERO_ZERO_SENTINEL,
-  1, 13, 36, 24, 3, 15, 34, 22, 5, 17, 32, 20, 7, 11, 30, 26, 9, 28,
+  1,
+  13,
+  36,
+  24,
+  3,
+  15,
+  34,
+  22,
+  5,
+  17,
+  32,
+  20,
+  7,
+  11,
+  30,
+  26,
+  9,
+  28,
 ];
 
 /**
@@ -220,7 +90,7 @@ const BALL_JITTER_RANGE = 1;
 const WHEEL_SIZE_RATIO = 0.95;
 const BALL_ORBIT_RATIO = 0.36;
 const BALL_SIZE_RATIO = 0.025;
-const POINTER_TOP_RATIO = 0.10;
+const POINTER_TOP_RATIO = 0.1;
 const POINTER_FONT_RATIO = 0.08;
 
 interface Props {

@@ -1,7 +1,6 @@
 ﻿namespace OnlineCasino.Middlewares
 {
     using System.Text.Json;
-
     using OnlineCasino.Models;
 
     /// <summary>

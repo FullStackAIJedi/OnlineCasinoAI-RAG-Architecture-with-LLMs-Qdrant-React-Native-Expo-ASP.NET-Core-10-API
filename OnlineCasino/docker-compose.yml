@@ -1,0 +1,67 @@
+﻿services:
+  casino:
+    build:
+      context: ./OnlineCasino
+      dockerfile: Dockerfile
+    image: onlinecasino:latest
+    container_name: onlinecasino
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./OnlineCasino/data:/app/data
+    environment:
+      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT}
+      ASPNETCORE_URLS: http://+:8080
+      ConnectionStrings__Default: ${CONNECTION_STRING}
+      Jwt__Key: ${JWT_KEY}
+      Jwt__Issuer: ${JWT_ISSUER}
+      Jwt__Audience: ${JWT_AUDIENCE}
+      Jwt__ExpireMinutes: ${JWT_EXPIRE_MINUTES}
+      RagService__BaseUrl: http://rag-service:8081
+    depends_on:
+      - rag-service
+    restart: unless-stopped
+
+  rag-service:
+    build:
+      context: ./Casino.RagService
+      dockerfile: Dockerfile
+    image: casino-ragservice:latest
+    container_name: casino-ragservice
+    ports:
+      - "0.0.0.0:8091:8081"
+    environment:
+      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT}
+      ASPNETCORE_URLS: http://0.0.0.0:8081
+      DOTNET_SYSTEM_NET_DISABLEIPV6: "1"
+      Qdrant__Host: ${QDRANT_HOST}
+      Qdrant__Port: ${QDRANT_PORT}
+      Qdrant__CollectionName: ${QDRANT_COLLECTION_NAME}
+      Qdrant__VectorSize: ${QDRANT_VECTOR_SIZE}
+      Groq__ApiKey: ${GROQ_API_KEY}
+      Groq__Model: ${GROQ_MODEL}
+      Groq__BaseUrl: ${GROQ_BASE_URL}
+      Cloudflare__AccountId: ${CLOUDFLARE_ACCOUNT_ID}
+      Cloudflare__ApiToken: ${CLOUDFLARE_API_TOKEN}
+      Cloudflare__Model: ${CLOUDFLARE_MODEL}
+      Cloudflare__VectorSize: ${CLOUDFLARE_VECTOR_SIZE}
+    depends_on:
+      qdrant:
+        condition: service_healthy
+    restart: unless-stopped
+
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: casino-qdrant
+    ports:
+      - "6333:6333"
+      - "6334:6334"
+    volumes:
+      - ./qdrant-data:/qdrant/storage
+    healthcheck:
+      test: ["CMD-SHELL", "bash -c 'exec 3<>/dev/tcp/127.0.0.1/6333' || exit 1"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 15s
+    restart: unless-stopped

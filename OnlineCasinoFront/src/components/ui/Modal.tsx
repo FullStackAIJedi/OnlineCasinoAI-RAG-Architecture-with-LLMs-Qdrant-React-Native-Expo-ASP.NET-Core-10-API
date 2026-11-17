@@ -1,5 +1,10 @@
 import React from "react";
-import { Modal as RNModal, StyleSheet, Text, TouchableOpacity } from "react-native";
+import {
+  Modal as RNModal,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+} from "react-native";
 
 import { useTheme } from "../../theme/ThemeProvider";
 
@@ -29,33 +34,35 @@ export const Modal = ({
 }: Props) => {
   const theme = useTheme();
 
-  // Цвят на бордера според variant (може да се override-не)
   const resolvedBorderColor =
     borderColor ??
     (variant === "success"
       ? theme.success
       : variant === "danger"
-      ? theme.danger
-      : variant === "warning"
-      ? theme.warning
-      : theme.border);
+        ? theme.danger
+        : variant === "warning"
+          ? theme.warning
+          : theme.border);
 
-  // Цвят на фона – override или tinted според variant
   const resolvedBackground =
     background ??
     (variant === "success"
       ? theme.success + "11"
       : variant === "danger"
-      ? theme.danger + "11"
-      : variant === "warning"
-      ? theme.warning + "11"
-      : theme.card);
+        ? theme.danger + "11"
+        : variant === "warning"
+          ? theme.warning + "11"
+          : theme.card);
 
-  // Цвят на backdrop-а – override или от темата
   const resolvedBackdropColor = backdropColor ?? theme.overlay;
 
   return (
-    <RNModal visible={visible} transparent animationType="fade" onRequestClose={onClose}>
+    <RNModal
+      visible={visible}
+      transparent
+      animationType="fade"
+      onRequestClose={onClose}
+    >
       <TouchableOpacity
         style={[styles.backdrop, { backgroundColor: resolvedBackdropColor }]}
         activeOpacity={1}
@@ -72,7 +79,9 @@ export const Modal = ({
           ]}
         >
           {title && (
-            <Text style={[styles.title, { color: resolvedBorderColor }]}>{title}</Text>
+            <Text style={[styles.title, { color: resolvedBorderColor }]}>
+              {title}
+            </Text>
           )}
           {children}
         </TouchableOpacity>

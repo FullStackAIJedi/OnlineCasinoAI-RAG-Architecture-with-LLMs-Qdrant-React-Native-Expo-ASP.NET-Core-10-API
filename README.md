@@ -63,24 +63,51 @@ The project is built with a strong emphasis on testability, type safety and clea
 
 Both the frontend and backend are fully documented. The backend exposes interactive API documentation through Swagger UI, and the frontend is documented through TypeScript types, JSDoc comments on hooks and components, plus the test suite that acts as executable documentation for every screen and hook.
 
+### Implemented AI-Powered RAG Question-Answering Microservice
+
+The platform includes a dedicated **RAG microservice** for casino policy intelligence, providing context-grounded answers to user questions. It ingests structured Markdown policy documents, generates embeddings using **Cloudflare Workers AI**, stores vectors in **Qdrant**, and retrieves the top 3 most relevant results using cosine similarity before generating responses with **Groq LLM**.
+
+Built with **Microsoft.Extensions.AI** and **Microsoft.Extensions.VectorData**, enabling provider-independent AI integration and seamless provider swapping without changing the underlying business logic.
+
+**Key features:**
+
+- Structured Markdown policy ingestion with automatic startup indexing.
+- Semantic vector retrieval using cosine similarity and relevance thresholding.
+- Context-grounded LLM responses with hallucination-resistant prompting.
+- Source attribution for retrieved policy documents.
+- Separation of responsibilities through `IRagService`, `IRetrievalService`, and `IPolicyIngestionService`.
+- Resilient HTTP clients using Polly (`AddStandardResilienceHandler`).
+- Dependency injection, structured logging, and configurable AI providers.
+
 ## Tech Stack
 
-| Layer               | Technology                                     |
-| ------------------- | ---------------------------------------------- |
-| Mobile framework    | React Native 0.86.3                            |
-| Runtime             | Expo SDK 57.0.25                               |
-| Language (frontend) | TypeScript 6.0 (strict)                        |
-| Routing             | Expo Router 57.0.23 (file-based, typed routes) |
-| State / data        | TanStack Query v5.104                          |
-| Secure storage      | Expo Secure Store 57.0.4                       |
-| Backend             | ASP.NET Core 10                                |
-| Language (backend)  | C# 13                                          |
-| ORM                 | Entity Framework Core 10                       |
-| Database            | SQLite                                         |
-| Container           | Docker + Docker Compose                        |
-| Frontend testing    | Jest 30 + React Native Testing Library 14      |
-| Backend testing     | xUnit + EF Core                                |
-| CI                  | GitHub Actions                                 |
+| Layer                    | Technology                                     |
+| ------------------------ | ---------------------------------------------- |
+| Mobile framework         | React Native 0.86.3                            |
+| Runtime                  | Expo SDK 57.0.25                               |
+| Language (frontend)      | TypeScript 6.0 (strict)                        |
+| Routing                  | Expo Router 57.0.23 (file-based, typed routes) |
+| State / data             | TanStack Query v5.104                          |
+| Secure storage           | Expo Secure Store 57.0.4                       |
+| Backend                  | ASP.NET Core 10                                |
+| Language (backend)       | C# 13                                          |
+| ORM                      | Entity Framework Core 10                       |
+| Database                 | SQLite                                         |
+| Vector database          | Qdrant                                         |
+| AI abstractions          | Microsoft.Extensions.AI                        |
+| Vector data abstractions | Microsoft.Extensions.VectorData                |
+| LLM provider             | Groq                                           |
+| Embedding provider       | Cloudflare Workers AI                          |
+| RAG architecture         | Retrieval-Augmented Generation (RAG)           |
+| Vector search            | Cosine similarity                              |
+| HTTP resilience          | Polly (`AddStandardResilienceHandler`)         |
+| API documentation        | Swagger / OpenAPI                              |
+| Dependency injection     | .NET Dependency Injection                      |
+| Logging                  | Microsoft.Extensions.Logging                   |
+| Containerization         | Docker + Docker Compose                        |
+| Frontend testing         | Jest 30 + React Native Testing Library 14      |
+| Backend testing          | xUnit + EF Core                                |
+| CI                       | GitHub Actions                                 |
 
 ## Mobile App
 

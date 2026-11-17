@@ -1,3 +1,44 @@
+// {
+//   "expo": {
+//     "name": "OnlineCasino",
+//     "slug": "onlinecasinofront",
+//     "version": "1.0.0",
+//     "orientation": "portrait",
+//     "scheme": "onlinecasino",
+//     "userInterfaceStyle": "automatic",
+//     "plugins": [
+//       "expo-router",
+//       "expo-secure-store",
+//       [
+//         "expo-system-ui",
+//         {
+//           "userInterfaceStyle": "automatic"
+//         }
+//       ],
+//       "expo-font",
+//       "expo-asset"
+//     ],
+//     "experiments": {
+//       "typedRoutes": true
+//     },
+//     "ios": {
+//       "supportsTablet": true,
+//       "infoPlist": {
+//         "NSAppTransportSecurity": {
+//           "NSAllowsArbitraryLoads": true
+//         }
+//       }
+//     },
+//     "android": {
+//       "package": "com.onlinecasino.app",
+//       "usesCleartextTraffic": true
+//     },
+//     "web": {
+//       "bundler": "metro"
+//     }
+//   }
+// }
+
 {
   "expo": {
     "name": "OnlineCasino",
@@ -30,8 +71,7 @@
       }
     },
     "android": {
-      "package": "com.onlinecasino.app",
-      "usesCleartextTraffic": true
+      "package": "com.onlinecasino.app"
     },
     "web": {
       "bundler": "metro"

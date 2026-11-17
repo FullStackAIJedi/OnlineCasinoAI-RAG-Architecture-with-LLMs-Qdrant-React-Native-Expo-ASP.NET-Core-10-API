@@ -1,7 +1,6 @@
 ﻿namespace OnlineCasino.Data
 {
-    using Microsoft.EntityFrameworkCore;
-
+    using Microsoft.EntityFrameworkCore; 
     using OnlineCasino.Entities;
 
     public class AppDbContext : DbContext

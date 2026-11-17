@@ -43,17 +43,26 @@ export default function TabsLayout() {
         name="index"
         options={{
           title: "Games",
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="game-controller" color={color} size={size} />
+          tabBarIcon: ({ focused, size }) => (
+            <Ionicons
+              name="game-controller"
+              color={focused ? theme.warning : theme.clean}
+              size={size}
+            />
           ),
         }}
       />
+
       <Tabs.Screen
         name="wallet"
         options={{
           title: "Wallet",
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="wallet" color={color} size={size} />
+          tabBarIcon: ({ focused, size }) => (
+            <Ionicons
+              name="wallet"
+              color={focused ? theme.warning : theme.clean}
+              size={size}
+            />
           ),
         }}
       />
@@ -61,8 +70,12 @@ export default function TabsLayout() {
         name="history"
         options={{
           title: "History",
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="time" color={color} size={size} />
+          tabBarIcon: ({ focused, size }) => (
+            <Ionicons
+              name="time"
+              color={focused ? theme.warning : theme.clean}
+              size={size}
+            />
           ),
         }}
       />
@@ -70,8 +83,26 @@ export default function TabsLayout() {
         name="profile"
         options={{
           title: "Profile",
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="person" color={color} size={size} />
+          tabBarIcon: ({ focused, size }) => (
+            <Ionicons
+              name="person"
+              color={focused ? theme.warning : theme.clean}
+              size={size}
+            />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="qna"
+        options={{
+          title: "Q&A",
+          headerShown: false,
+          tabBarIcon: ({ focused, size }) => (
+            <Ionicons
+              name="chatbubbles"
+              color={focused ? theme.warning : theme.clean}
+              size={size}
+            />
           ),
         }}
       />

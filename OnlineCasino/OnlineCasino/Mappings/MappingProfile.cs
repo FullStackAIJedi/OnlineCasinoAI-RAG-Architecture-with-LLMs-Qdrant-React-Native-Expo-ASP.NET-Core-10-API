@@ -1,15 +1,15 @@
-﻿using AutoMapper;
-
-using OnlineCasino.Entities;
-
-using OnlineCasino.DTOs.Auth;
-using OnlineCasino.DTOs.Games;
-using OnlineCasino.DTOs.History;
-using OnlineCasino.DTOs.Users;
-using OnlineCasino.DTOs.Wallet;
-
-namespace OnlineCasino.Mappings
+﻿namespace OnlineCasino.Mappings
 {
+    using AutoMapper;
+
+    using OnlineCasino.Entities;
+
+    using OnlineCasino.DTOs.Auth;
+    using OnlineCasino.DTOs.Games;
+    using OnlineCasino.DTOs.History;
+    using OnlineCasino.DTOs.Users;
+    using OnlineCasino.DTOs.Wallet;
+
     public class MappingProfile : Profile
     {
         public MappingProfile()

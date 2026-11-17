@@ -1,4 +1,9 @@
 <Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".env" />
+    <File Path=".env.example" />
+  </Folder>
+  <Project Path="Casino.RagService/Casino.RagService.csproj" />
   <Project Path="OnlineCasino.Tests/OnlineCasino.Tests.csproj" Id="74bf4331-d51e-42f2-8b7b-05b9757b29fb" />
   <Project Path="OnlineCasino/OnlineCasino.csproj" />
 </Solution>

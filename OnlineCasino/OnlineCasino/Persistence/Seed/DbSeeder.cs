@@ -1,7 +1,6 @@
 ﻿namespace OnlineCasino.Data.Seed
 {
     using Microsoft.EntityFrameworkCore;
-
     using OnlineCasino.Entities;
 
     public static class DbSeeder

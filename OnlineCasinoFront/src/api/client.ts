@@ -3,7 +3,6 @@ import * as SecureStore from "expo-secure-store";
 import { ApiError } from "./errors";
 import type { ErrorResponse } from "./types";
 
-/** Base URL of the backend API. */
 const BASE_URL = process.env.EXPO_PUBLIC_API_URL;
 if (!BASE_URL) {
   throw new Error(
@@ -11,10 +10,8 @@ if (!BASE_URL) {
   );
 }
 
-/** SecureStore key under which the auth cookie is persisted. */
 const COOKIE_KEY = "access_token_cookie";
 
-/** Request timeout in milliseconds. */
 const REQUEST_TIMEOUT_MS = 15000;
 
 /**

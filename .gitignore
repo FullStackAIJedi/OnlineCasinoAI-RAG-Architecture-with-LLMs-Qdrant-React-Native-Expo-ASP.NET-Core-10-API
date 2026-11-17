@@ -28,6 +28,7 @@ web-build/
 .env.development.local
 .env.test.local
 .env.production.local
+!.env.example
 appsettings.*.local.json
 secrets.json
 
@@ -72,6 +73,10 @@ artifacts/
 *.sqlite
 *.sqlite3
 *.db-journal
+
+# Docker data
+qdrant-data/
+OnlineCasino/data/
 
 # OS
 .DS_Store

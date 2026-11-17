@@ -6,11 +6,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 using OnlineCasino.Data;
 using OnlineCasino.Data.Seed;
-
 using OnlineCasino.Mappings;
- 
 using OnlineCasino.Middlewares;
-
 using OnlineCasino.Services;
   
 var builder = WebApplication.CreateBuilder(args);

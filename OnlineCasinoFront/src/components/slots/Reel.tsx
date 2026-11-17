@@ -1,114 +1,3 @@
-// import { useEffect, useRef, useState } from "react";
-// import { Animated, Easing, StyleSheet, Text, View } from "react-native";
-// import { useTheme } from "../../theme/ThemeProvider";
-// import { ALL_SYMBOL_CODES, getSymbol } from "./symbols";
-
-// interface ReelProps {
-//   finalSymbol: string | null;
-//   spinning: boolean;
-//   duration?: number;
-//   delay?: number;
-//   onStop?: () => void;
-//   reelsCount?: number;
-// }
-
-// export const Reel = ({
-//   finalSymbol,
-//   spinning,
-//   duration = 1500,
-//   delay = 0,
-//   onStop,
-//   reelsCount = 3,
-// }: ReelProps) => {
-//   const theme = useTheme();
-
-//   const [displaySymbol, setDisplaySymbol] = useState(finalSymbol ?? "cherry");
-
-//   const bounceAnim = useRef(new Animated.Value(1)).current;
-//   const fadeAnim = useRef(new Animated.Value(1)).current;
-//   const onStopRef = useRef(onStop);
-//   onStopRef.current = onStop;
-
-//   useEffect(() => {
-//     if (spinning) {
-//       const interval = setInterval(() => {
-//         const random =
-//           ALL_SYMBOL_CODES[
-//             Math.floor(Math.random() * ALL_SYMBOL_CODES.length)
-//           ];
-//         setDisplaySymbol(random);
-//       }, 80);
-
-//       return () => clearInterval(interval);
-//     }
-
-//     if (!spinning && finalSymbol) {
-//       const timer = setTimeout(() => {
-//         setDisplaySymbol(finalSymbol);
-
-//         Animated.sequence([
-//           Animated.timing(bounceAnim, {
-//             toValue: 1.15,
-//             duration: 120,
-//             easing: Easing.out(Easing.ease),
-//             useNativeDriver: true,
-//           }),
-//           Animated.timing(bounceAnim, {
-//             toValue: 1,
-//             duration: 120,
-//             easing: Easing.in(Easing.ease),
-//             useNativeDriver: true,
-//           }),
-//         ]).start();
-
-//         onStopRef.current?.();
-//       }, delay);
-
-//       return () => clearTimeout(timer);
-//     }
-//   }, [spinning, finalSymbol, delay, bounceAnim]);
-
-//   const symbol = getSymbol(displaySymbol);
-//   const isFourReels = reelsCount === 4;
-//   const bgSize = isFourReels ? 80 : 108;
-//   const emojiSize = isFourReels ? 32 : 45;
-
-//   return (
-//     <Animated.View
-//       style={{
-//         transform: [{ scale: bounceAnim }],
-//         opacity: fadeAnim,
-//       }}
-//     >
-//       <View
-//         style={[
-//           styles.symbolBg,
-//           {
-//             backgroundColor: theme.card,
-//             width: bgSize,
-//             height: bgSize,
-//             borderRadius: bgSize / 2,
-//           },
-//         ]}
-//       >
-//         <Text style={[styles.emoji, { fontSize: emojiSize }]}>
-//           {symbol.emoji}
-//         </Text>
-//       </View>
-//     </Animated.View>
-//   );
-// };
-
-// const styles = StyleSheet.create({
-//   symbolBg: {
-//     justifyContent: "center",
-//     alignItems: "center",
-//   },
-//   emoji: {
-//     textAlign: "center",
-//   },
-// });
-
 import { useEffect, useRef, useState } from "react";
 import { Animated, Easing, StyleSheet, Text, View } from "react-native";
 
@@ -159,7 +48,7 @@ export const Reel = ({
   const theme = useTheme();
 
   const [displaySymbol, setDisplaySymbol] = useState(
-    finalSymbol ?? DEFAULT_SYMBOL
+    finalSymbol ?? DEFAULT_SYMBOL,
   );
 
   const bounceAnim = useRef(new Animated.Value(1)).current;
@@ -169,9 +58,7 @@ export const Reel = ({
     if (spinning) {
       const interval = setInterval(() => {
         const random =
-          ALL_SYMBOL_CODES[
-            Math.floor(Math.random() * ALL_SYMBOL_CODES.length)
-          ];
+          ALL_SYMBOL_CODES[Math.floor(Math.random() * ALL_SYMBOL_CODES.length)];
         setDisplaySymbol(random);
       }, SYMBOL_CYCLE_MS);
 

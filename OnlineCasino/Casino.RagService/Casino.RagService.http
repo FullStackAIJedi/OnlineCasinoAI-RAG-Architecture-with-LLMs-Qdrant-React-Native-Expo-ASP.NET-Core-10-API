@@ -1,0 +1,6 @@
+@Casino.RagService_HostAddress = http://localhost:5195
+
+GET {{Casino.RagService_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
