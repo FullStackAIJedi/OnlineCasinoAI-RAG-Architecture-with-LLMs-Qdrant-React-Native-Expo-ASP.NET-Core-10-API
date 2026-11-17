@@ -1,7 +1,6 @@
 # OnlineCasino
 
-[![Mobile CI](https://github.com/SekulKamberov2/OnlineCasino-React-Native-Expo-ASP.NET-Core-10-API-EntityFrameworkCore/actions/workflows/ci-mobile.yml/badge.svg)]
-(https://github.com/SekulKamberov2/OnlineCasino-React-Native-Expo-ASP.NET-Core-10-API-EntityFrameworkCore/actions/workflows/ci-mobile.yml)
+[![Mobile CI](https://github.com/FullStackAIJedi/OnlineCasinoAI-RAG-Architecture-with-LLMs-Qdrant-React-Native-Expo-ASP.NET-Core-10-API/actions/workflows/ci-mobile.yml/badge.svg)](https://github.com/FullStackAIJedi/OnlineCasinoAI-RAG-Architecture-with-LLMs-Qdrant-React-Native-Expo-ASP.NET-Core-10-API/actions/workflows/ci-mobile.yml)
 ![Frontend Tests](https://img.shields.io/badge/frontend%20tests-450%20passed-brightgreen)
 ![Backend Tests](https://img.shields.io/badge/backend%20tests-403%20passed-brightgreen)
 ![Total Tests](https://img.shields.io/badge/total%20tests-853%20passed-success)
