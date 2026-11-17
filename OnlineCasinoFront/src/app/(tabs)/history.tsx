@@ -42,7 +42,9 @@ export default function HistoryScreen() {
         refreshControl={
           <RefreshControl
             refreshing={isRefetching}
-            onRefresh={refetch}
+            onRefresh={async () => {
+              await refetch();
+            }}
             tintColor={theme.primary}
           />
         }
@@ -107,7 +109,7 @@ export default function HistoryScreen() {
             <Text style={[styles.empty, { color: theme.textSecondary }]}>
               No rounds played yet
             </Text>
-          ) : null
+          ) : undefined
         }
       />
     </SafeAreaView>

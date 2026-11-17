@@ -48,6 +48,18 @@
 
 <p align="center">
   <img src="OnlineCasinoFront/assets/screens/21.png" width="150" height="267" style="border: 2px solid #010408; border-radius: 10px; margin: 6px;" />
+ <img
+    src="https://raw.githubusercontent.com/FullStackAIJedi/OnlineCasinoAI-RAG-Architecture-with-LLMs-Qdrant-React-Native-Expo-ASP.NET-Core-10-API/main/OnlineCasinoFront/assets/screens/22.webp"
+    width="150"
+    height="267"
+    style="border: 2px solid #010408; border-radius: 10px; margin: 6px;"
+  />
+  <img
+    src="https://raw.githubusercontent.com/FullStackAIJedi/OnlineCasinoAI-RAG-Architecture-with-LLMs-Qdrant-React-Native-Expo-ASP.NET-Core-10-API/main/OnlineCasinoFront/assets/screens/23.webp"
+    width="150"
+    height="267"
+    style="border: 2px solid #010408; border-radius: 10px; margin: 6px;"
+  />
 </p>
 
 A full-stack casino gaming application built with React Native, Expo and TypeScript on the frontend, and ASP.NET Core 10 with Entity Framework Core and SQLite on the backend.
